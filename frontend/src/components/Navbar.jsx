@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
-import Uskillbook from "../assets/Uskillbook.png";
+import Uskillbook from "../assets/uskillbook.png";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
