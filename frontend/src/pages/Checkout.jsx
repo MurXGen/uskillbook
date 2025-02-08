@@ -103,6 +103,7 @@ const Checkout = () => {
             id="fileInput"
             onChange={handleImageChange}
             className="fileInput"
+            capture="environment"
           />
         </div>
 
