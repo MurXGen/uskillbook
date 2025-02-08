@@ -1,0 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar Start */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 80px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgb(222, 222, 222);
+  position: sticky;
+  top: 0;
+  align-items: center;
+}
+
+/* Logo Section */
+.navbar .logoText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .logoText img {
+  width: 45px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.navbar .logoText span {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Desktop Menu */
+.navbar .menus {
+  display: flex;
+  gap: 40px;
+}
+
+.navbar .menus a {
+  font-size: 14px;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+}
+
+/* MOBILE RESPONSIVENESS */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 70px;
+  width: 100%;
+  background-color: rgba(10, 10, 10, 0.9);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem 0;
+  transform: translateY(-200%);
+  transition: transform 0.4s ease-in-out;
+}
+
+.mobile-menu.show {
+  transform: translateY(0);
+}
+
+.mobile-menu a {
+  padding: 12px;
+  color: aliceblue;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.mobile-menu a:hover {
+  background-color: rgba(255, 175, 56, 0.5);
+  border-radius: 4px;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 14px 20px;
+  }
+
+  .navbar .menus {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+
+  .navbar .logoText img {
+    width: 35px;
+  }
+
+  .navbar .logoText span {
+    font-size: 16px;
+  }
+}
+
+/* Navbar End */
+
+/* Dashboard Start  */
+
+@media screen and (max-width: 768px) {
+  .dashboard .payNow{
+      margin: 24px;
+      padding: 24px;
+      border-radius: 24px;
+      background-color: #F1F7FF;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 20px;
+  }
+
+  .dashboard .payNow .title{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dashboard .payNow .title .desc{
+    font-size: medium;
+    color: #1D77FF;
+  }
+
+  .dashboard .payNow .title .title{
+    font-size: x-large;
+    color: #00317A;
+    font-weight: 600;
+  }
+
+  .dashboard .payNow .features{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dashboard .payNow .features .feature{
+    display: flex;
+    align-content:flex-start;
+    gap: 4px;
+    color: #00317A;
+    font-weight: 500;
+  }
+
+  .dashboard .payNow .proceed{
+    width: 50%;
+    background-color: #1D77FF;
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F1F7FF;
+    box-shadow: 5px 5px 5px #bbbbbb;
+    transition-duration: 0.3s;
+    cursor: pointer;
+  }
+
+  .dashboard .payNow .proceed:hover{
+    box-shadow: none;
+    transition: 0.3s;
+
+  }
+
+  .dashboard .payNow a{
+    text-decoration: none;
+    color: #F1F7FF;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .dashboard .payNow .proceed span{
+    font-size: 32px;
+  }
+
+
+}
+
+/* Dashboard End */
+
+
+/* Checkout starts */
+
+.container{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 24px;
+}
+
+.container .note{
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  justify-content: center;
+  color: #1D77FF;
+  background-color: #F1F7FF;
+  padding: 12px;
+  gap: 12px;
+}
+
+.container .note span{
+  font-weight: 500;
+}
+
+/* Checkout ends */
+
+
+/* hint start */
+
+.container .hint{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.container .hint div{
+  background-color: #F1F7FF;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 6px;
+  width: 50%;
+  gap: 4px;
+}
+
+.container .hint div img{
+  width: 120px;
+  height: 120px;
+}
+
+.container .hint div .desc{
+font-size: 12px;
+font-weight: 600;
+text-align: center;
+background-color: #FFF;
+width: 100%;
+padding: 8px 0;
+}
+
+/* hint ends */
+
+.userAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  background-color: #F1F7FF;
+  padding: 12px;
+  gap: 14px;
+  border: 1px solid #c6ddff;
+}
+
+.previewContainer {
+  width: 50%;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.previewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.uploadPlaceholder {
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+}
+
+.fileInput {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  cursor: pointer;
+}
+
+.formFilling {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+  justify-content: space-between;
+  height: 100%;
+  font-weight: 400;
+}
+
+.priceInput {
+  width: 100%;
+  border: 0;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: 550;
+  color: #1D77FF;
+
+}
+
+.priceInput::placeholder {
+  color: #84b5ff;
+}
+
+.submit-button {
+  padding: 12px 20px;
+  background-color: #1D77FF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.submit-button:hover {
+  background-color: #00378b;
+}
+
+
+.priceBox{
+  display: flex;
+  flex-direction: row;
+  background-color: #FFF;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+
+}
+
+.formFilling .dropdown{
+  padding: 16px 12px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Remove border when clicking on the price input */
+.no-border {
+  border: none;
+  outline: none;
+}
+
+/* Custom Dropdown Styling */
+.customDropdown {
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  
+}
+
+.dropdownHeader {
+  padding: 10px;
+  background-color: #ffffff;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 12px 18px;
+  font-size: 14px;
+}
+
+.dropdownHeader .dropDownLabel{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.dropdownOptions {
+  position: absolute;
+  font-size: 14px;
+  width: 100%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 5;
+}
+
+.dropdownOptions div {
+  padding: 12px 18px;
+  text-align: left;
+  transition: background 0.3s;
+}
+
+.dropdownOptions div:hover {
+  background-color: #eee;
+}
+
+/* Slide-down animation */
+.slide-down {
+  animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
