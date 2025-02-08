@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Hint from '../assets/hint1.png';
 import Hint1 from '../assets/hint2.png';
@@ -12,63 +12,42 @@ const Checkout = () => {
   const [paymentMode, setPaymentMode] = useState("Online Mode");
   const [buyType, setBuyType] = useState("Buy");
 
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
+  // State to control custom dropdown visibility
+  const [showPaymentDropdown, setShowPaymentDropdown] = useState(false);
+  const [showBuyTypeDropdown, setShowBuyTypeDropdown] = useState(false);
 
-  // Open the camera when clicking "Click to upload"
-  const openCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (error) {
-      alert("Camera access denied or unavailable.");
-      console.error("Error accessing camera:", error);
-    }
-  };
-
-  // Capture the photo
-  const capturePhoto = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (video && canvas) {
-      const context = canvas.getContext("2d");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageDataUrl = canvas.toDataURL("image/png");
-      setImageUrl(imageDataUrl);
-      setImage(imageDataUrl);
-
-      // Stop the camera
-      const stream = video.srcObject;
-      const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
-      video.srcObject = null;
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setImage(file);
     }
   };
 
   const handleSubmit = async () => {
     if (!image || !price || !paymentMode || !buyType) {
-      alert("Please take a photo, enter a price, and select all options.");
+      alert("Please upload an image, enter a price, and select all options.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("image", image);
     formData.append("price", price);
     formData.append("paymentMode", paymentMode);
     formData.append("buyType", buyType);
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/orders", {
         method: "POST",
         body: formData,
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         navigate("/summary", {
           state: {
@@ -87,6 +66,7 @@ const Checkout = () => {
       alert("An error occurred. Please try again.");
     }
   };
+  
 
   return (
     <div className="container">
@@ -108,31 +88,26 @@ const Checkout = () => {
         </div>
       )}
 
-      {/* Image Capture Section */}
+      {/* Image Upload Section */}
       <div className="userAction">
         <div className="previewContainer">
-          {imageUrl ? (
-            <img src={imageUrl} alt="Preview" className="previewImg" />
-          ) : (
-            <div className="uploadPlaceholder" onClick={openCamera}>
-              Click to take a photo
-            </div>
+          {imageUrl && <img src={imageUrl} alt="Preview" className="previewImg" />}
+          {!imageUrl && (
+            <label htmlFor="fileInput" className="uploadPlaceholder">
+              Click to upload image
+            </label>
           )}
+          <input
+            type="file"
+            accept="image/*"
+            id="fileInput"
+            onChange={handleImageChange}
+            className="fileInput"
+          />
         </div>
-
-        {/* Camera View */}
-        <div className="cameraContainer">
-          <video ref={videoRef} autoPlay className="cameraFeed"></video>
-          {videoRef.current && (
-            <button onClick={capturePhoto} className="captureButton">
-              Capture
-            </button>
-          )}
-        </div>
-
-        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
         <div className="formFilling">
+
           <div className="priceBox">
             <span className="material-symbols-outlined">currency_rupee</span>
             <input
@@ -148,28 +123,53 @@ const Checkout = () => {
           <div className="customDropdown">
             <div
               className="dropdownHeader"
-              onClick={() => setPaymentMode(paymentMode === "Online Mode" ? "Cash" : "Online Mode")}
+              onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
             >
-              {paymentMode} <span className="material-symbols-outlined">arrow_drop_down_circle</span>
+              <div className="dropDownLabel">
+                <div>{paymentMode}</div>
+                <div><span className="material-symbols-outlined">
+                  arrow_drop_down_circle
+                </span></div>
+              </div>
+
             </div>
+            {showPaymentDropdown && (
+              <div className="dropdownOptions slide-down">
+                <div onClick={() => { setPaymentMode("Online Mode"); setShowPaymentDropdown(false); }}>Online Mode</div>
+                <div onClick={() => { setPaymentMode("Cash"); setShowPaymentDropdown(false); }}>Cash</div>
+              </div>
+            )}
           </div>
 
           {/* Custom Dropdown - Buy Type */}
           <div className="customDropdown">
             <div
               className="dropdownHeader"
-              onClick={() => setBuyType(buyType === "Buy" ? "Rent" : "Buy")}
+              onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
             >
-              {buyType} <span className="material-symbols-outlined">arrow_drop_down_circle</span>
+              <div className="dropDownLabel">
+                <div>{buyType}</div>
+                <div><span className="material-symbols-outlined">
+                  arrow_drop_down_circle
+                </span></div>
+              </div>
             </div>
+            {showBuyTypeDropdown && (
+              <div className="dropdownOptions slide-down">
+                <div onClick={() => { setBuyType("Buy"); setShowBuyTypeDropdown(false); }}>Buy</div>
+                <div onClick={() => { setBuyType("Rent"); setShowBuyTypeDropdown(false); }}>Rent</div>
+              </div>
+            )}
           </div>
+
         </div>
       </div>
 
       {/* Proceed Button */}
       <div className="proceed">
         <button onClick={handleSubmit} className="submit-button">
-          Proceed to Summary <span className="material-symbols-outlined">arrow_right</span>
+          Proceed to Summary
+          <span className="material-symbols-outlined">arrow_right</span>
         </button>
       </div>
     </div>
