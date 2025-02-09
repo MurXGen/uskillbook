@@ -48,7 +48,7 @@ const Checkout = () => {
     formData.append("buyType", buyType);
 
     try {
-      const response = await fetch("http://localhost:5000/api/orders", {
+      const response = await fetch("https://uskillbook.onrender.com/api/orders", {
         method: "POST",
         body: formData,
       });
@@ -58,7 +58,7 @@ const Checkout = () => {
       if (response.ok) {
         navigate("/summary", {
           state: {
-            imageUrl: `http://localhost:5000${data.order.imageUrl}`,
+            imageUrl: `https://uskillbook.onrender.com/${data.order.imageUrl}`,
             price,
             paymentMode,
             buyType,
