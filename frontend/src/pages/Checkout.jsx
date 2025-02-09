@@ -58,7 +58,7 @@ const Checkout = () => {
       if (response.ok) {
         navigate("/summary", {
           state: {
-            imageUrl: `https://uskillbook.onrender.com/${data.order.imageUrl}`,
+            imageUrl: `https://uskillbook.onrender.com${data.order.imageUrl}`,
             price,
             paymentMode,
             buyType,
