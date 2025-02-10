@@ -236,12 +236,12 @@ const Checkout = () => {
                   }
                 >
                   {price >= 1200
-                    ? "🌟 You've Become our Platinum Customer 🌟"
+                    ? "💎 You've became our Premium Customer 💎"
                     : price >= 800
-                      ? "💎 You've Become our Diamond Customer 💎"
+                      ? "🌟 You've got the best with us !🌟"
                       : price >= 500
-                        ? "🥇 You've Become our Golden Customer 🥇"
-                        : "❤️ You've Became Loved Customer ❤️"}
+                        ? "🥇 You've Became our exciting Customer 🥇"
+                        : "❤️ You've got at the lowest prices !! ❤️"}
                 </motion.span>
               </motion.div>
             )}
@@ -254,7 +254,7 @@ const Checkout = () => {
       {/* Proceed Button */}
       <div className="proceed">
         <button onClick={handleSubmit} className="submit-button">
-          Proceed to Summary
+          Pay
           <span className="material-symbols-outlined">arrow_right</span>
         </button>
       </div>

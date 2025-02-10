@@ -36,7 +36,11 @@ const TransactionHistory = () => {
   // Update order
   const updateOrder = async () => {
     try {
-      const response = await axios.put(`https://uskillbook.onrender.com/api/orders/${editOrder}`, updatedData);
+      const response = await axios.put(
+        `https://uskillbook.onrender.com/api/orders/${editOrder}`,
+        updatedData,
+        { headers: { "Content-Type": "application/json" } }
+      );
       setOrders(orders.map(order => (order._id === editOrder ? response.data.order : order)));
       setEditOrder(null);
     } catch (error) {
@@ -79,7 +83,7 @@ const TransactionHistory = () => {
                   <option value="Rent">Rent</option>
                 </select>
               ) : order.buyType}</td>
-              <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+              <td>{new Date(order.createdAt).toLocaleDateString()}</td>
               <td>
                 {editOrder === order._id ? (
                   <button onClick={updateOrder}>Save</button>
