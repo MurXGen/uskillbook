@@ -42,6 +42,14 @@ const getOrders = async (req, res) => {
 const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Updating Order ID:", id); // Debugging log
+
+    const orderExists = await Order.findById(id);
+    if (!orderExists) {
+      console.log("Order not found in DB");
+      return res.status(404).json({ message: "Order not found" });
+    }
+
     const { price, paymentMode, buyType } = req.body;
 
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -50,16 +58,14 @@ const updateOrder = async (req, res) => {
       { new: true }
     );
 
-    if (!updatedOrder) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
+    console.log("Updated Order:", updatedOrder);
     res.status(200).json({ message: "Order updated successfully", order: updatedOrder });
   } catch (error) {
     console.error("Error updating order:", error);
     res.status(500).json({ error: "Failed to update order" });
   }
 };
+
 
 // Delete an order
 const deleteOrder = async (req, res) => {
