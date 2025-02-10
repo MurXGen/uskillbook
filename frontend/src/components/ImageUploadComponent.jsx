@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import "../checkout.css";
 
 const ImageUploadComponent = ({
   image,
@@ -11,6 +12,9 @@ const ImageUploadComponent = ({
   setBuyType,
 }) => {
   const [imageUrl, setImageUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPaymentDropdown, setShowPaymentDropdown] = useState(false);
+  const [showBuyTypeDropdown, setShowBuyTypeDropdown] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -24,11 +28,17 @@ const ImageUploadComponent = ({
     }
   };
 
+  const handleUploadClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
   const handleSubmit = async () => {
     if (!image) {
       alert("Please upload an image.");
       return;
     }
+
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("image", image);
@@ -43,56 +53,130 @@ const ImageUploadComponent = ({
       });
 
       if (response.ok) {
-        window.location.href = "https://razorpay.me/@uskillbook"; // Redirect to payment
+        window.location.href = "https://razorpay.me/@uskillbook";
       } else {
         alert("Order failed. Try again.");
       }
     } catch (error) {
       console.error(error);
       alert("An error occurred.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return (
+  return (<>
+  <div className="securedNote">
+        <span className="material-symbols-outlined">verified</span>
+        <span>Final Step</span>
+      </div>
+ 
     <div className="image-upload-container">
-      <h2>Upload Image</h2>
-      <div className="upload-box">
-        {imageUrl && <img src={imageUrl} alt="Preview" className="preview-img" />}
-        {!imageUrl && (
-          <label htmlFor="fileInput" className="upload-placeholder">
+      {isLoading && (
+        <div className="loading-overlay">
+          <motion.div
+            className="loading-icon"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          >
+            🔄
+          </motion.div>
+          <p>Processing your order...</p>
+        </div>
+      )}
+
+      <div className="upload-box" onClick={handleUploadClick}>
+        {imageUrl ? (
+          <img src={imageUrl} alt="Preview" className="preview-img" />
+        ) : (
+          <div className="upload-placeholder">
             <span className="material-symbols-outlined">upload</span>
-            Click to upload image
-          </label>
+            <p>Click to upload image</p>
+          </div>
         )}
-        <input
-          type="file"
-          accept="image/*"
-          id="fileInput"
-          onChange={handleImageChange}
-          className="file-input"
-          capture="environment"
-        />
       </div>
 
+      <input
+        type="file"
+        accept="image/*"
+        id="fileInput"
+        onChange={handleImageChange}
+        className="file-input"
+        capture="environment"
+        style={{ display: "none" }}
+      />
+
+      {/* Animated Dropdowns */}
       <div className="dropdowns">
         {/* Payment Mode Dropdown */}
-        <select value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)}>
-          <option value="Online Mode">Online Mode</option>
-          <option value="Cash">Cash</option>
-        </select>
+        <div className="dropdown">
+          <button
+            className="dropdown-btn"
+            onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
+          >
+            {paymentMode}
+            <span class="material-symbols-outlined">
+keyboard_arrow_down
+</span>
+          </button>
+          <AnimatePresence>
+            {showPaymentDropdown && (
+              <motion.ul
+                className="dropdown-list"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <li onClick={() => { setPaymentMode("Online Mode"); setShowPaymentDropdown(false); }}>
+                  Online Mode
+                </li>
+                <li onClick={() => { setPaymentMode("Cash"); setShowPaymentDropdown(false); }}>
+                  Cash
+                </li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Buy Type Dropdown */}
-        <select value={buyType} onChange={(e) => setBuyType(e.target.value)}>
-          <option value="Buy">Buy</option>
-          <option value="Rent">Rent</option>
-        </select>
+        <div className="dropdown">
+          <button
+            className="dropdown-btn"
+            onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
+          >
+            
+            {buyType}
+            <span class="material-symbols-outlined">
+              keyboard_arrow_down
+            </span>
+          </button>
+          <AnimatePresence>
+            {showBuyTypeDropdown && (
+              <motion.ul
+                className="dropdown-list"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <li onClick={() => { setBuyType("Buy"); setShowBuyTypeDropdown(false); }}>
+                  Buy
+                </li>
+                <li onClick={() => { setBuyType("Rent"); setShowBuyTypeDropdown(false); }}>
+                  Rent
+                </li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
-      <button className="submit-button" onClick={handleSubmit}>
-        Pay
+      <button className="submit" onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Pay"}
       </button>
     </div>
-  );
+    </>);
 };
 
 export default ImageUploadComponent;
