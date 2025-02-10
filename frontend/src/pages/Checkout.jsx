@@ -12,6 +12,7 @@ const Checkout = () => {
   const [price, setPrice] = useState("");
   const [paymentMode, setPaymentMode] = useState("Online Mode");
   const [buyType, setBuyType] = useState("Buy");
+  const [loading, setLoading] = useState(false);
 
   // State to control custom dropdown visibility
   const [showPaymentDropdown, setShowPaymentDropdown] = useState(false);
@@ -40,6 +41,7 @@ const Checkout = () => {
       return;
     }
 
+    setLoading(true); // Show loading animation
 
     const formData = new FormData();
     formData.append("image", image);
@@ -56,19 +58,17 @@ const Checkout = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate("/summary", {
-          state: {
-            imageUrl: `https://uskillbook.onrender.com${data.order.imageUrl}`,
-            price,
-            paymentMode,
-            buyType,
-          },
-        });
+        setTimeout(() => {
+          setLoading(false);
+          window.location.href = "https://razorpay.me/uskillbook"; // Redirect to Razorpay after success
+        }, 1500); // Wait 1.5 seconds to show loading animation
       } else {
+        setLoading(false);
         console.error("Server Error Response:", data);
         alert(data.error || "Failed to create order");
       }
     } catch (error) {
+      setLoading(false);
       console.error("Network error:", error);
       alert("An error occurred. Please try again.");
     }
@@ -81,6 +81,25 @@ const Checkout = () => {
         <span className="material-symbols-outlined">verified</span>
         <span className="title">Click Buying Books Photo & Pay</span>
       </div>
+
+      {loading && (
+        <motion.div
+          className="loading-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="spinner"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          >
+            🔄 {/* Replace this with a proper spinner icon if needed */}
+          </motion.div>
+          <p>Processing Order...</p>
+        </motion.div>
+      )}
+
 
       {/* {!imageUrl && (
         <div className="hint">
@@ -167,67 +186,67 @@ const Checkout = () => {
         </div>
 
         <div className="userActionB">
-  <div className="priceBox">
-    <span className="material-symbols-outlined">currency_rupee</span>
-    <input
-      type="number"
-      placeholder="Enter Price"
-      value={price}
-      onChange={(e) => {
-        const value = e.target.value;
-        if (value === "") {
-          setPrice(""); // Allow empty input
-        } else if (Number(value) >= 1) {
-          setPrice(Number(value)); // Set price only if it's 1 or more
-        }
-      }}
-      onBlur={() => {
-        if (price === "" || price < 1) {
-          setPrice(1); // Ensure minimum value
-        }
-      }}
-      className="priceInput no-border"
-    />
-  </div>
+          <div className="priceBox">
+            <span className="material-symbols-outlined">currency_rupee</span>
+            <input
+              type="number"
+              placeholder="Enter Price"
+              value={price}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "") {
+                  setPrice(""); // Allow empty input
+                } else if (Number(value) >= 1) {
+                  setPrice(Number(value)); // Set price only if it's 1 or more
+                }
+              }}
+              onBlur={() => {
+                if (price === "" || price < 1) {
+                  setPrice(1); // Ensure minimum value
+                }
+              }}
+              className="priceInput no-border"
+            />
+          </div>
 
-  {/* Customer Tag Animation */}
-  <AnimatePresence>
-    {price > 300 && (
-      <motion.div
-        className="customerTag"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <motion.span
-          key={price}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ type: "spring", stiffness: 120 }}
-          className={
-            price > 1200
-              ? "platnium"
-              : price > 800
-              ? "diamond"
-              : price > 500
-              ? "gold"
-              : "loved"
-          }
-        >
-          {price > 1200
-            ? "🌟 Platinum Customer 🌟"
-            : price > 800
-            ? "💎 Diamond Customer 💎"
-            : price > 500
-            ? "🥇 Gold Customer 🥇"
-            : "❤️ You're our Loved Customer ❤️"}
-        </motion.span>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
+          {/* Customer Tag Animation */}
+          <AnimatePresence>
+            {price >= 100 && (
+              <motion.div
+                className="customerTag"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <motion.span
+                  key={price}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ type: "spring", stiffness: 120 }}
+                  className={
+                    price >= 1200
+                      ? "platnium"
+                      : price > 800
+                        ? "diamond"
+                        : price > 500
+                          ? "gold"
+                          : "loved"
+                  }
+                >
+                  {price >= 1200
+                    ? "🌟 You've Become our Platinum Customer 🌟"
+                    : price >= 800
+                      ? "💎 You've Become our Diamond Customer 💎"
+                      : price >= 500
+                        ? "🥇 You've Become our Golden Customer 🥇"
+                        : "❤️ You're Became Loved Customer ❤️"}
+                </motion.span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
 
       </div>

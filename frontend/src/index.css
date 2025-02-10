@@ -288,7 +288,7 @@ padding: 8px 0;
   border-radius: 12px;
   padding: 12px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .previewContainer {
@@ -452,4 +452,25 @@ padding: 8px 0;
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.spinner {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
