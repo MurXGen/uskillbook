@@ -9,4 +9,8 @@ router.post("/", upload.single("image"), createOrder);
 
 router.get("/", getOrders);
 
+router.get("/ping", (req, res) => {
+    res.status(200).json({ message: "Server is alive!" });
+  });
+
 module.exports = router;

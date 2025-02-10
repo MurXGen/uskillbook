@@ -2,10 +2,10 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-dotenv.config();
+
 const mongoose = require("mongoose");
 const orderRoutes = require("./routes/orderRoutes");
-
+dotenv.config();
 
 
 const app = express();
@@ -22,6 +22,10 @@ app.use(
 );
 
 app.use("/api/orders", orderRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
   
 mongoose
   .connect(process.env.MONGO_URI)
