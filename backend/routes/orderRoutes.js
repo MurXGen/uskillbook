@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../middleware/upload");
-const { createOrder } = require("../controllers/orderController");
+const { createOrder,getOrders } = require("../controllers/orderController");
 
 const router = express.Router();
 
