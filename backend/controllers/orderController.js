@@ -2,18 +2,17 @@ const Order = require("../models/Order");
 
 const createOrder = async (req, res) => {
   try {
-    // Destructure the fields from the request body
     const { price, paymentMode, buyType } = req.body;
 
-    // Ensure that the image is uploaded
-    if (!req.file) {
+    // Ensure image upload
+    if (!req.file || !req.file.path) {
       return res.status(400).json({ error: "Image file is required" });
     }
 
-    // Generate image URL based on the file's location in the server's 'uploads' directory
-    const imageUrl = `/uploads/${req.file.filename}`;
+    // Get the Cloudinary image URL
+    const imageUrl = req.file.path;
 
-    // Validate the required fields
+    // Validate required fields
     if (!price || !paymentMode || !buyType) {
       return res.status(400).json({ error: "All fields (price, paymentMode, buyType) are required" });
     }
@@ -24,7 +23,7 @@ const createOrder = async (req, res) => {
     // Save the order to the database
     await newOrder.save();
 
-    // Send a response to the frontend with the order data
+    // Send response
     res.status(201).json({
       message: "Order created successfully",
       order: newOrder,

@@ -4,7 +4,7 @@ const { createOrder } = require("../controllers/orderController");
 
 const router = express.Router();
 
-// Route to create an order, with image upload handled by multer
+// Route to create an order with Cloudinary image upload
 router.post("/", upload.single("image"), createOrder);
 
 module.exports = router;
