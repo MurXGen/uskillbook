@@ -3,27 +3,20 @@ const Order = require("../models/Order");
 const createOrder = async (req, res) => {
   try {
     const { price, paymentMode, buyType } = req.body;
-
-    // Ensure image upload
     if (!req.file || !req.file.path) {
       return res.status(400).json({ error: "Image file is required" });
     }
-
-    // Get the Cloudinary image URL
     const imageUrl = req.file.path;
 
-    // Validate required fields
+
     if (!price || !paymentMode || !buyType) {
       return res.status(400).json({ error: "All fields (price, paymentMode, buyType) are required" });
     }
 
-    // Create a new order instance
     const newOrder = new Order({ imageUrl, price, paymentMode, buyType });
 
-    // Save the order to the database
     await newOrder.save();
 
-    // Send response
     res.status(201).json({
       message: "Order created successfully",
       order: newOrder,
@@ -34,4 +27,14 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 }); // Fetch orders, sorted by latest
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+};
+
+module.exports = { createOrder , getOrders };
