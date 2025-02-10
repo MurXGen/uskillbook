@@ -16,6 +16,7 @@ body {
   position: sticky;
   top: 0;
   align-items: center;
+  z-index: 6;
 }
 
 /* Logo Section */
@@ -89,7 +90,7 @@ body {
 /* Media Queries */
 @media screen and (max-width: 768px) {
   .navbar {
-    padding: 14px 20px;
+    padding: 24px 20px;
   }
 
   .navbar .menus {
@@ -102,6 +103,7 @@ body {
 
   .mobile-menu {
     display: flex;
+    gap: 12px;
   }
 
   .navbar .logoText img {
@@ -116,8 +118,6 @@ body {
 /* Navbar End */
 
 /* Dashboard Start  */
-
-@media screen and (max-width: 768px) {
   .dashboard .payNow{
       margin: 24px;
       padding: 24px;
@@ -189,11 +189,7 @@ body {
 
   .dashboard .payNow .proceed span{
     font-size: 32px;
-  }
-
-
 }
-
 /* Dashboard End */
 
 
