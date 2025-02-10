@@ -60,7 +60,7 @@ const Checkout = () => {
       if (response.ok) {
         setTimeout(() => {
           setLoading(false);
-          window.location.href = "https://razorpay.me/uskillbook"; // Redirect to Razorpay after success
+          window.location.href = "https://razorpay.me/@uskillbook"; // Redirect to Razorpay after success
         }, 1500); // Wait 1.5 seconds to show loading animation
       } else {
         setLoading(false);
