@@ -66,61 +66,24 @@ const updateOrder = async (req, res) => {
   }
 };
 
-
 // Delete an order
 const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Deleting Order ID:", id); // Debugging log
+
     const deletedOrder = await Order.findByIdAndDelete(id);
 
     if (!deletedOrder) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    res.status(200).json({ message: "Order deleted successfully" });
+    res.status(200).json({ message: "Order deleted successfully", deletedOrder });
   } catch (error) {
     console.error("Error deleting order:", error);
-    res.status(500).json({ error: "Failed to delete order" });
+    res.status(500).json({ message: "Failed to delete order" });
   }
 };
 
+// Export all functions properly
 module.exports = { createOrder, getOrders, updateOrder, deleteOrder };
-
-exports.updateOrder = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { price, paymentMode, buyType } = req.body;
-
-    const updatedOrder = await Order.findByIdAndUpdate(
-      id,
-      { price, paymentMode, buyType },
-      { new: true }
-    );
-
-    if (!updatedOrder) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    res.json({ message: "Order updated successfully", order: updatedOrder });
-  } catch (error) {
-    res.status(500).json({ message: "Error updating order", error });
-  }
-};
-
-// Delete an order
-exports.deleteOrder = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedOrder = await Order.findByIdAndDelete(id);
-
-    if (!deletedOrder) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    res.json({ message: "Order deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting order", error });
-  }
-};
-
-module.exports = { createOrder , getOrders };
