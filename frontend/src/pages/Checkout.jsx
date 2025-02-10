@@ -224,7 +224,7 @@ const Checkout = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  transition={{ type: "spring", stiffness: 120 }}
+                  transition={{ type: "spring", stiffness: 150 }}
                   className={
                     price >= 1200
                       ? "platnium"
@@ -241,7 +241,7 @@ const Checkout = () => {
                       ? "💎 You've Become our Diamond Customer 💎"
                       : price >= 500
                         ? "🥇 You've Become our Golden Customer 🥇"
-                        : "❤️ You're Became Loved Customer ❤️"}
+                        : "❤️ You've Became Loved Customer ❤️"}
                 </motion.span>
               </motion.div>
             )}
