@@ -1,129 +1,72 @@
-/* Container Styling */
-.transactions-container {
-  max-width: 1000px;
-  margin: auto;
-  text-align: center;
-  color: white;
-  padding: 20px;
-}
-
-/* Grid Layout */
-.transactions-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-/* Transaction Card */
-.transaction-card {
-  width: 260px;
-  background: rgba(255, 255, 255, 0.1); /* Glassy effect */
-  border-radius: 12px;
-  padding: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Hover Effect */
-.transaction-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 8px 16px rgba(0, 255, 255, 0.5);
-}
-
-/* Product Image */
-.product-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  border: 2px solid rgba(0, 255, 255, 0.5);
-}
-
-/* Text Styling */
-p {
-  margin: 5px 0;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-/* Buttons */
-.card-actions {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-}
-
-/* Edit Button - Neon Green */
-.edit-btn {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  color: white;
-}
-
-.edit-btn:hover {
-  background: linear-gradient(135deg, #27ae60, #1e8449);
-  box-shadow: 0px 0px 10px #27ae60;
-}
-
-/* Delete Button - Neon Red */
-.delete-btn {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  color: white;
-}
-
-.delete-btn:hover {
-  background: linear-gradient(135deg, #c0392b, #a93226);
-  box-shadow: 0px 0px 10px #e74c3c;
-}
-
-/* Save Button - Neon Blue */
-.save-btn {
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: white;
-  margin-top: 10px;
-}
-
-.save-btn:hover {
-  background: linear-gradient(135deg, #2980b9, #1f618d);
-  box-shadow: 0px 0px 10px #3498db;
-}
-
-/* Input and Select Fields */
-input, select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-weight: 600;
-  outline: none;
-}
-
-/* Input and Select Focus */
-input:focus, select:focus {
-  border: 1px solid #00ffff;
-  box-shadow: 0px 0px 8px #00ffff;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .transactions-grid {
-    flex-direction: column;
-    align-items: center;
+.transaction-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
   }
-}
+  
+  .orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  
+  .order-box {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .order-box:hover {
+    transform: scale(1.02);
+  }
+  
+  .order-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .order-details p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .order-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .edit-btn, .delete-btn, .save-btn {
+    border: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  .edit-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .save-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  select, input {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
