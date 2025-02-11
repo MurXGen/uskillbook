@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
+import '../index.css'
 
 const ProtectedRoute = ({ children }) => {
   const [password, setPassword] = useState("");
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
       <form onSubmit={handleSubmit}>
         <input
           type="password"
-          placeholder="Enter Password"
+          placeholder="***"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

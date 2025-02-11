@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
+import "../history.css"; // Make sure to create this CSS file
 
 const TransactionHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -47,56 +49,58 @@ const TransactionHistory = () => {
       console.error("Error updating order:", error);
     }
   };
-  
 
   return (
-    <div className="container">
+    <div className="transactions-container">
       <h2>Transaction History</h2>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Price</th>
-            <th>Payment Mode</th>
-            <th>Buy Type</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map(order => (
-            <tr key={order._id}>
-              <td>
-                <img src={order.imageUrl} alt="Product" width="50" />
-              </td>
-              <td>{editOrder === order._id ? (
-                <input type="number" value={updatedData.price} onChange={(e) => setUpdatedData({ ...updatedData, price: e.target.value })} />
-              ) : order.price}</td>
-              <td>{editOrder === order._id ? (
-                <select value={updatedData.paymentMode} onChange={(e) => setUpdatedData({ ...updatedData, paymentMode: e.target.value })}>
+      <div className="transactions-grid">
+        {orders.map((order, index) => (
+          <motion.div
+            key={order._id}
+            className="transaction-card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <img src={order.imageUrl} alt="Product" className="product-image" />
+            {editOrder === order._id ? (
+              <>
+                <input
+                  type="number"
+                  value={updatedData.price}
+                  onChange={(e) => setUpdatedData({ ...updatedData, price: e.target.value })}
+                />
+                <select
+                  value={updatedData.paymentMode}
+                  onChange={(e) => setUpdatedData({ ...updatedData, paymentMode: e.target.value })}
+                >
                   <option value="Online Mode">Online Mode</option>
                   <option value="Cash">Cash</option>
                 </select>
-              ) : order.paymentMode}</td>
-              <td>{editOrder === order._id ? (
-                <select value={updatedData.buyType} onChange={(e) => setUpdatedData({ ...updatedData, buyType: e.target.value })}>
+                <select
+                  value={updatedData.buyType}
+                  onChange={(e) => setUpdatedData({ ...updatedData, buyType: e.target.value })}
+                >
                   <option value="Buy">Buy</option>
                   <option value="Rent">Rent</option>
                 </select>
-              ) : order.buyType}</td>
-              <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-              <td>
-                {editOrder === order._id ? (
-                  <button onClick={updateOrder}>Save</button>
-                ) : (
-                  <button onClick={() => startEdit(order)}>Edit</button>
-                )}
-                <button onClick={() => deleteOrder(order._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <button className="save-btn" onClick={updateOrder}>Save</button>
+              </>
+            ) : (
+              <>
+                <p><strong>Price:</strong> ₹{order.price}</p>
+                <p><strong>Payment Mode:</strong> {order.paymentMode}</p>
+                <p><strong>Buy Type:</strong> {order.buyType}</p>
+                <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+                <div className="card-actions">
+                  <button className="edit-btn" onClick={() => startEdit(order)}>Edit</button>
+                  <button className="delete-btn" onClick={() => deleteOrder(order._id)}>Delete</button>
+                </div>
+              </>
+            )}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };

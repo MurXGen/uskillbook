@@ -478,3 +478,53 @@ padding: 8px 0;
   font-size: 2rem;
   margin-bottom: 10px;
 }
+
+
+.auth-container{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 60px;
+  width: 350px;
+  border-radius: 12px;
+  padding: 24px 12px;
+  background-color: rgb(255, 255, 255,0.2);
+}
+
+.auth-container h2{
+  color: #FFF;
+  font-family: 'poppins';
+}
+
+.auth-container form{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-container form input{
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+
+.auth-container form input::placeholder{
+  color: #FFF;
+}
+
+.auth-container form button{
+  border: 0;
+  color: #007bff;
+  font-size: 14px;
+  padding: 12px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
