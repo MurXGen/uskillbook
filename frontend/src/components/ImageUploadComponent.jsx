@@ -66,11 +66,11 @@ const ImageUploadComponent = ({
   };
 
   return (<>
-  <div className="securedNote">
-        <span className="material-symbols-outlined">verified</span>
-        <span>Final Step</span>
-      </div>
- 
+    <div className="securedNote">
+      <span className="material-symbols-outlined">verified</span>
+      <span>Final Step</span>
+    </div>
+
     <div className="image-upload-container">
       {isLoading && (
         <div className="loading-overlay">
@@ -116,8 +116,8 @@ const ImageUploadComponent = ({
           >
             {paymentMode}
             <span class="material-symbols-outlined">
-keyboard_arrow_down
-</span>
+              keyboard_arrow_down
+            </span>
           </button>
           <AnimatePresence>
             {showPaymentDropdown && (
@@ -145,7 +145,7 @@ keyboard_arrow_down
             className="dropdown-btn"
             onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
           >
-            
+
             {buyType}
             <span class="material-symbols-outlined">
               keyboard_arrow_down
@@ -174,9 +174,12 @@ keyboard_arrow_down
 
       <button className="submit" onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? "Processing..." : "Pay"}
+        <span class="material-symbols-outlined">
+          arrow_right_alt
+        </span>
       </button>
     </div>
-    </>);
+  </>);
 };
 
 export default ImageUploadComponent;

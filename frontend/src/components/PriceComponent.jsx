@@ -65,6 +65,9 @@ const PriceComponent = ({ price, setPrice, onNext }) => {
 
       <button className="next-button" onClick={onNext} disabled={!price}>
         Next
+        <span class="material-symbols-outlined">
+          arrow_right_alt
+        </span>
       </button>
     </div>
   );
