@@ -53,7 +53,7 @@ const ImageUploadComponent = ({
       });
 
       if (response.ok) {
-        window.location.href = "https://razorpay.me/@uskillbook";
+        window.location.href = "https://uskillbook.vercel.app/transaction-history";
       } else {
         alert("Order failed. Try again.");
       }
