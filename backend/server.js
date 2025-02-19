@@ -22,13 +22,13 @@ app.use(
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// Parse JSON and URL-encoded form data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+// // Parse JSON and URL-encoded form data
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true })); 
 
-//phonepe Route
-const phonepeRoute = require('./routes/phonepeRoute')
-app.use("/api", phonepeRoute);
+// //phonepe Route
+// const phonepeRoute = require('./routes/phonepeRoute')
+// app.use("/api", phonepeRoute);
 
 
 // Routes
