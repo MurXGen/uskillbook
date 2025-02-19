@@ -16,25 +16,24 @@ const ImageUploadComponent = ({
   const [showPaymentDropdown, setShowPaymentDropdown] = useState(false);
   const [showBuyTypeDropdown, setShowBuyTypeDropdown] = useState(false);
 
+  // Handle Image Selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageUrl(reader.result);
-      };
+      reader.onloadend = () => setImageUrl(reader.result);
       reader.readAsDataURL(file);
       setImage(file);
     }
   };
 
-  const handleUploadClick = () => {
-    document.getElementById("fileInput").click();
-  };
+  // Open File Input on Click
+  const handleUploadClick = () => document.getElementById("fileInput").click();
 
+  // Handle Submit Order
   const handleSubmit = async () => {
-    if (!image) {
-      alert("Please upload an image.");
+    if (!image || !price) {
+      alert("⚠️ Please upload an image and enter a valid price.");
       return;
     }
 
@@ -52,134 +51,137 @@ const ImageUploadComponent = ({
         body: formData,
       });
 
+      const data = await response.json();
+      console.log("Response:", data);
+
       if (response.ok) {
         window.location.href = "https://uskillbook.vercel.app/transaction-history";
       } else {
-        alert("Order failed. Try again.");
+        alert("❌ Order failed. Please try again.");
       }
     } catch (error) {
-      console.error(error);
-      alert("An error occurred.");
+      console.error("Error:", error);
+      alert("⚠️ An error occurred while processing your order.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (<>
-    <div className="securedNote">
-      <span className="material-symbols-outlined">verified</span>
-      <span>Final Step</span>
-    </div>
+  return (
+    <>
+      {/* Secure Note */}
+      <div className="securedNote">
+        <span className="material-symbols-outlined">verified</span>
+        <span>Final Step</span>
+      </div>
 
-    <div className="image-upload-container">
-      {isLoading && (
-        <div className="loading-overlay">
-          <motion.div
-            className="loading-icon"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          >
-            🔄
-          </motion.div>
-          <p>Processing your order...</p>
-        </div>
-      )}
-
-      <div className="upload-box" onClick={handleUploadClick}>
-        {imageUrl ? (
-          <img src={imageUrl} alt="Preview" className="preview-img" />
-        ) : (
-          <div className="upload-placeholder">
-            <span className="material-symbols-outlined">upload</span>
-            <p>Click to upload image</p>
+      <div className="image-upload-container">
+        {/* Loading Overlay */}
+        {isLoading && (
+          <div className="loading-overlay">
+            <motion.div
+              className="loading-icon"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+            >
+              🔄
+            </motion.div>
+            <p>Processing your order...</p>
           </div>
         )}
-      </div>
 
-      <input
-        type="file"
-        accept="image/*"
-        id="fileInput"
-        onChange={handleImageChange}
-        className="file-input"
-        capture="environment"
-        style={{ display: "none" }}
-      />
-
-      {/* Animated Dropdowns */}
-      <div className="dropdowns">
-        {/* Payment Mode Dropdown */}
-        <div className="dropdown">
-          <button
-            className="dropdown-btn"
-            onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
-          >
-            {paymentMode}
-            <span class="material-symbols-outlined">
-              keyboard_arrow_down
-            </span>
-          </button>
-          <AnimatePresence>
-            {showPaymentDropdown && (
-              <motion.ul
-                className="dropdown-list"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <li onClick={() => { setPaymentMode("Online Mode"); setShowPaymentDropdown(false); }}>
-                  Online Mode
-                </li>
-                <li onClick={() => { setPaymentMode("Cash"); setShowPaymentDropdown(false); }}>
-                  Cash
-                </li>
-              </motion.ul>
-            )}
-          </AnimatePresence>
+        {/* Upload Box */}
+        <div className="upload-box" onClick={handleUploadClick}>
+          {imageUrl ? (
+            <img src={imageUrl} alt="Preview" className="preview-img" />
+          ) : (
+            <div className="upload-placeholder">
+              <span className="material-symbols-outlined">upload</span>
+              <p>Click to upload image</p>
+            </div>
+          )}
         </div>
 
-        {/* Buy Type Dropdown */}
-        <div className="dropdown">
-          <button
-            className="dropdown-btn"
-            onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
-          >
+        {/* Hidden File Input */}
+        <input
+          type="file"
+          accept="image/*"
+          id="fileInput"
+          onChange={handleImageChange}
+          className="file-input"
+          capture="environment"
+          style={{ display: "none" }}
+        />
 
-            {buyType}
-            <span class="material-symbols-outlined">
-              keyboard_arrow_down
-            </span>
-          </button>
-          <AnimatePresence>
-            {showBuyTypeDropdown && (
-              <motion.ul
-                className="dropdown-list"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <li onClick={() => { setBuyType("Buy"); setShowBuyTypeDropdown(false); }}>
-                  Buy
-                </li>
-                <li onClick={() => { setBuyType("Rent"); setShowBuyTypeDropdown(false); }}>
-                  Rent
-                </li>
-              </motion.ul>
-            )}
-          </AnimatePresence>
+        {/* Dropdowns */}
+        <div className="dropdowns">
+          {/* Payment Mode Dropdown */}
+          <div className="dropdown">
+            <button
+              className="dropdown-btn"
+              onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
+            >
+              {paymentMode}
+              <span className="material-symbols-outlined">keyboard_arrow_down</span>
+            </button>
+            <AnimatePresence>
+              {showPaymentDropdown && (
+                <motion.ul
+                  className="dropdown-list"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <li onClick={() => { setPaymentMode("Online Mode"); setShowPaymentDropdown(false); }}>
+                    Online Mode
+                  </li>
+                  <li onClick={() => { setPaymentMode("Cash"); setShowPaymentDropdown(false); }}>
+                    Cash
+                  </li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Buy Type Dropdown */}
+          <div className="dropdown">
+            <button
+              className="dropdown-btn"
+              onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
+            >
+              {buyType}
+              <span className="material-symbols-outlined">keyboard_arrow_down</span>
+            </button>
+            <AnimatePresence>
+              {showBuyTypeDropdown && (
+                <motion.ul
+                  className="dropdown-list"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <li onClick={() => { setBuyType("Buy"); setShowBuyTypeDropdown(false); }}>
+                    Buy
+                  </li>
+                  <li onClick={() => { setBuyType("Rent"); setShowBuyTypeDropdown(false); }}>
+                    Rent
+                  </li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
 
-      <button className="submit" onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? "Processing..." : "Pay"}
-        <span class="material-symbols-outlined">
-          arrow_right_alt
-        </span>
-      </button>
-    </div>
-  </>);
+        {/* Submit Button */}
+        <button className="submit" onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? "Processing..." : "Pay"}
+          <span className="material-symbols-outlined">arrow_right_alt</span>
+        </button>
+      </div>
+    </>
+  );
 };
 
 export default ImageUploadComponent;
