@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const correctPassword = "123mur"; // Change this to your desired password
+  const correctPassword = "9731"; // Change this to your desired password
 
   const handleSubmit = (e) => {
     e.preventDefault();
