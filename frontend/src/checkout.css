@@ -61,9 +61,6 @@ body {
 }
 
 .pricContainer .next-button {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
     padding: 16px;
     border: 0;
     border-radius: 8px;
@@ -279,9 +276,6 @@ body {
 }
 
 .image-upload-container .submit {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
     padding: 16px;
     border: 0;
     border-radius: 8px;
