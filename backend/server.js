@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const orderRoutes = require("./routes/orderRoutes");
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -20,6 +21,15 @@ app.use(
 // Middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
+
+// Parse JSON and URL-encoded form data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+//phonepe Route
+const phonepeRoute = require('./routes/phonepeRoute')
+app.use("/api", phonepeRoute);
+
 
 // Routes
 app.use("/api/orders", orderRoutes);

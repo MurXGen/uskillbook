@@ -56,7 +56,7 @@ const ImageUploadComponent = ({
       console.log(data);
 
       if (response.ok) {
-        window.location.href = "https://uskillbook.vercel.app/transaction-history";
+        window.location.href = "https://uskillbook.vercel.app/checkout";
       } else {
         alert("Order failed. Try again.");
       }
