@@ -1,3 +1,7 @@
+body{
+    font-family: 'poppins';
+}
+
 .supplier-container {
     margin: 24px 20px;
     display: flex;
@@ -16,8 +20,20 @@
 }
 
 .supplier-box>.supplierAction {
-    display: grid;
-    grid-template-columns: 70% 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.supplier-box>.supplierAction p{
+    display: flex;
+    flex-direction: column;
+}
+
+.supplier-box>.supplierAction p > span{
+    font-size: 24px;
+    font-weight: 700;
+    color: #007bff;
 }
 
 .supplier-box:hover {
@@ -25,15 +41,68 @@
 }
 
 .transaction-history {
+    margin: 32px 12px;
+    padding: 12px 0;
+  }
+  
+  .transaction-item {
+    display: flex;
+    flex-direction: column;
+    background: #b2d7ff;
+    padding: 16px 24px;
+    min-width: 120px;
+    max-width: 120px;
+    border-radius: 20px;
+    gap: 12px; /* Fixed typo 'gao' */
+  }
+  
+  .txn-type {
+    text-align: center;
+    background: #007bff;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    margin-top: -32px;
+    border: 1px solid;
+    font-size: 12px;
+  }
+  
+  .txn-amount {
+    font-size: 24px;
+    font-weight: 600;
+    color: #007bff;
+    text-align: center;
+  }
+  
+  .txn-reason {
+    font-size: 12px;
+    text-align: center;
+    height: 40px;
+    overflow-y: scroll;
+  }
+  
+  .txn-date {
+    font-size: 12px;
+    text-align: center;
+    background: black;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  
 
-}
-
-.supplierAction .deleteSupplier{
+.supplierAction .deleteSupplier {
     background-color: #007bff;
     color: #fff;
     padding: 6px;
-    font-size: 14px;
+    font-size: 20px;
     border-radius: 6px;
+    box-shadow: 1px 1px 5px #848484;
+    transition-duration: 0.3s;
+}
+
+.supplierAction .deleteSupplier:hover {
+    box-shadow: none;
+    transition: 0.3s;
 }
 
 button {

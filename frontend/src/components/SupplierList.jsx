@@ -33,8 +33,8 @@ const SupplierList = ({ refresh }) => {
         >
           <div className="supplierAction">
             <p>
-              <strong>{supplier.name}</strong>
-              :
+              <strong>{supplier.name} :</strong>
+              
               <span>₹{supplier.balance}</span>
             </p>
             <span onClick={() => deleteSupplier(supplier._id)} class="material-symbols-outlined deleteSupplier">
