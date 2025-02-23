@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const orderRoutes = require("./routes/orderRoutes");
+const supplierRoutes = require("./routes/supplierRoutes");
 
 dotenv.config();
 
@@ -20,9 +21,10 @@ app.use(
 // Middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-
-// Routes
+app.use("/api/suppliers", supplierRoutes);
 app.use("/api/orders", orderRoutes);
+
+
 
 app.get("/", (req, res) => {
   res.send("Backend is running!");

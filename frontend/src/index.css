@@ -6,6 +6,7 @@ body {
   padding: 0;
 }
 
+
 /* Navbar Start */
 .navbar {
   display: flex;
@@ -188,6 +189,7 @@ body {
     box-shadow: 1px 1px 5px #1D77FF;
     transition-duration: 0.3s;
     cursor: pointer;
+    border: 1px solid white;
   }
 
   .dashboard .payNow .proceed:hover{
