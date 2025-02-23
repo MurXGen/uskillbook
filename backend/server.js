@@ -21,7 +21,7 @@ app.use(
 // Middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-app.use("/api/suppliers", supplierRoutes);
+app.use("/api/suppliers", require("./routes/supplierRoutes"));
 app.use("/api/orders", orderRoutes);
 
 

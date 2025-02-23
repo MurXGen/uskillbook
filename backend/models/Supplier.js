@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const supplierSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  balance: { type: Number, required: true, default: 0 },
+  balance: { type: Number, default: 0 },
   transactions: [
     {
       amount: Number,
@@ -11,5 +11,4 @@ const supplierSchema = new mongoose.Schema({
   ],
 });
 
-const Supplier = mongoose.model("Supplier", supplierSchema);
-module.exports = Supplier;
+module.exports = mongoose.model("Supplier", supplierSchema);
