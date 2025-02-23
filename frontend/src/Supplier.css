@@ -45,6 +45,7 @@ body {
 .transaction-history {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 24px;
     overflow-x: scroll;
     padding: 32px 12px;

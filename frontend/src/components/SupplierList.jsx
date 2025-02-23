@@ -50,7 +50,9 @@ const SupplierList = ({ refresh }) => {
           </div>
 
           <div className="transaction-history">
-            <h4>Transaction History:</h4>
+            <span class="material-symbols-outlined">
+              arrow_forward_ios
+            </span>
             {supplier.transactions.length > 0 ? (
               supplier.transactions.map((txn, i) => (
                 <div
@@ -60,7 +62,7 @@ const SupplierList = ({ refresh }) => {
                 >
                   <span className="txn-type">{txn.type || "-"}</span>
                   <span className="txn-amount">₹{txn.amount || "-"}</span>
-                  
+
                   {/* Reason with smooth motion animation */}
                   <motion.span
                     className="txn-reason"
