@@ -14,27 +14,33 @@ router.delete("/:id", deleteSupplier);
 router.delete("/:supplierId/transactions/:txnId", async (req, res) => {
   try {
     const { supplierId, txnId } = req.params;
-    
-    // Find supplier
+
+    // Find the supplier
     const supplier = await Supplier.findById(supplierId);
-    if (!supplier) return res.status(404).json({ message: "Supplier not found" });
+    if (!supplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
 
-    // Find transaction to delete
-    const txnIndex = supplier.transactions.findIndex(txn => txn._id.toString() === txnId);
-    if (txnIndex === -1) return res.status(404).json({ message: "Transaction not found" });
+    // Find the transaction
+    const transactionIndex = supplier.transactions.findIndex(txn => txn._id.toString() === txnId);
+    if (transactionIndex === -1) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
 
-    // Deduct transaction amount from balance
-    supplier.balance -= supplier.transactions[txnIndex].amount;
+    // Subtract transaction amount from supplier balance
+    const txnAmount = supplier.transactions[transactionIndex].amount;
+    supplier.balance -= txnAmount;
 
-    // Remove transaction from array
-    supplier.transactions.splice(txnIndex, 1);
+    // Remove the transaction
+    supplier.transactions.splice(transactionIndex, 1);
 
-    // Save updated supplier
+    // Save the updated supplier document
     await supplier.save();
 
-    res.json({ message: "Transaction deleted", supplier });
+    res.json({ message: "Transaction deleted successfully", supplier });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting transaction", error });
+    console.error("Error deleting transaction:", error);
+    res.status(500).json({ message: "Internal Server Error", error });
   }
 });
 
