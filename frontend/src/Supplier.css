@@ -1,44 +1,48 @@
 .supplier-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .supplier-box {
-    background: rgba(255, 255, 255, 0.2);
+    margin: 24px 20px;
+    display: flex
+;
+    flex-direction: column;
+}
+
+.supplier-box {
+    background: #fff;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .supplier-box:hover {
+    box-shadow: 0 4px 10px #0000001a;
+    transition: transform .3sease-in-out;
+}
+
+.supplier-box > .supplierAction{
+display: flex;
+justify-content: space-between;
+gap: 12px;
+}
+
+.supplier-box:hover {
     transform: scale(1.05);
-  }
-  
-  .transaction-form input, select {
-    padding: 8px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  button {
+}
+
+.transaction-history{
+    display: flex;
+}
+
+button {
     background: #007bff;
     color: white;
     border: none;
     padding: 8px 12px;
-    margin: 5px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  button:disabled {
+}
+
+button:disabled {
     opacity: 0.5;
-  }
-  
-  .loader {
+}
+
+.loader {
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-top: 3px solid #ffffff;
     border-radius: 50%;
@@ -46,10 +50,70 @@
     height: 15px;
     animation: spin 1s linear infinite;
     display: inline-block;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.addSupplier {
+    background-color: rgb(255, 255, 255, 0.2);
+    padding: 24px;
+    margin: 24px 20px;
+    border-radius: 8px;
+    display: grid;
+    gap: 12px;
+}
+
+.addSupplier input,
+button {
+    padding: 12px;
+}
+
+.transaction-form {
+    opacity: 1;
+    display: grid;
+    grid-template-columns: auto;
+    margin: 24px 20px;
+    background: rgb(255, 255, 255, 0.2);
+    transform: none;
+    padding: 24px;
+    gap: 12px;
+}
+
+.transaction-form>div>input,
+button,
+select {
+    padding: 12px;
+    width: 100%;
+}
+
+
+.transaction-form div {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.transaction-form div .plus,.minus {
+    font-size: 24px;
+}
+
+.transaction-form div .amountInput {
+font-size: 24px;
+font-weight: 900;
+text-align: center;
+color: #007bff;
+border: 0;
+}
+
+
+
+

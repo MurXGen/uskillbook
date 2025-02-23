@@ -31,8 +31,11 @@ const SupplierList = ({ refresh }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-          <p><strong>{supplier.name}</strong> - ₹{supplier.balance}</p>
-          <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
+            <div className="supplierAction">
+            <p><strong>{supplier.name}</strong> - ₹{supplier.balance}</p>
+            <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
+            </div>
+          
 
           <div className="transaction-history">
             <h4>Transaction History:</h4>

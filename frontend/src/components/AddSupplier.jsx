@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import '../Supplier.css'
 
 const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers"; // Updated API base URL
 
@@ -24,7 +25,7 @@ const AddSupplier = ({ onAdd }) => {
   };
 
   return (
-    <div>
+    <div className="addSupplier">
       <input
         type="text"
         placeholder="Supplier Name"
