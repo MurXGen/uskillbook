@@ -6,7 +6,7 @@ const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers";
 
 const SupplierList = ({ refresh }) => {
   const [suppliers, setSuppliers] = useState([]);
-  const [expandedTxn, setExpandedTxn] = useState(null);
+  const [expandedTxn, setExpandedTxn] = useState(null); // To track expanded transactions
 
   useEffect(() => {
     axios.get(API_BASE_URL)
@@ -23,30 +23,8 @@ const SupplierList = ({ refresh }) => {
   };
 
   const toggleTxnReason = (index) => {
-    setExpandedTxn(expandedTxn === index ? null : index);
+    setExpandedTxn(expandedTxn === index ? null : index); // Toggle state
   };
-
-  const deleteTransaction = (supplierId, txnId, txnAmount) => {
-    axios.delete(`${API_BASE_URL}/${supplierId}/transactions/${txnId}`)
-      .then((res) => {
-        console.log("Transaction deleted successfully:", res.data);
-        
-        setSuppliers(prevSuppliers =>
-          prevSuppliers.map(supplier => {
-            if (supplier._id === supplierId) {
-              return {
-                ...supplier,
-                transactions: supplier.transactions.filter(txn => txn._id !== txnId),
-                balance: supplier.balance - txnAmount // Update balance
-              };
-            }
-            return supplier;
-          })
-        );
-      })
-      .catch(err => console.log("Error deleting transaction:", err));
-  };
-    
 
   return (
     <div className="supplier-container">
@@ -72,38 +50,30 @@ const SupplierList = ({ refresh }) => {
           </div>
 
           <div className="transaction-history">
-            <h4>Transaction History:</h4>
+            <span class="material-symbols-outlined">
+              arrow_forward_ios
+            </span>
             {supplier.transactions.length > 0 ? (
               supplier.transactions.map((txn, i) => (
                 <div
-                  key={txn._id}
+                  key={i}
                   className="transaction-item"
-                  onClick={() => toggleTxnReason(`${supplier._id}-${txn._id}`)}
+                  onClick={() => toggleTxnReason(`${supplier._id}-${i}`)}
                 >
                   <span className="txn-type">{txn.type || "-"}</span>
                   <span className="txn-amount">₹{txn.amount || "-"}</span>
 
+                  {/* Reason with smooth motion animation */}
                   <motion.span
                     className="txn-reason"
                     initial={{ height: 0, opacity: 0 }}
-                    animate={expandedTxn === `${supplier._id}-${txn._id}` ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+                    animate={expandedTxn === `${supplier._id}-${i}` ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
                     "{txn.reason || "-"}"
                   </motion.span>
 
                   <span className="txn-date">{txn.date ? new Date(txn.date).toLocaleString() : "-"}</span>
-
-                  {/* Delete Transaction Button */}
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent expanding on delete click
-                      deleteTransaction(supplier._id, txn._id, txn.amount);
-                    }}
-                    className="material-symbols-outlined deleteTxn"
-                  >
-                    delete
-                  </span>
                 </div>
               ))
             ) : (
