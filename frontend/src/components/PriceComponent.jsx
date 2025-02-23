@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../checkout.css";
 
 const PriceComponent = ({ price, setPrice, onNext }) => {
   const [message, setMessage] = useState(""); // State for the dynamic message
@@ -64,9 +63,11 @@ const PriceComponent = ({ price, setPrice, onNext }) => {
         </div>
       </div>
 
-      <button className="fixed-proceed-btn" onClick={onNext} disabled={!price}>
+      <button className="next-button" onClick={onNext} disabled={!price}>
         Next
-        <span className="material-symbols-outlined">arrow_right_alt</span>
+        <span class="material-symbols-outlined">
+          arrow_right_alt
+        </span>
       </button>
     </div>
   );
