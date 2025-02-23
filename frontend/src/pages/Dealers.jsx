@@ -10,7 +10,7 @@ const Dealer = () => {
   // Fetch suppliers from the database
   const fetchSuppliers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/suppliers/all");
+      const { data } = await axios.get("https://uskiilbook.onrender.com/api/suppliers/all");
       if (Array.isArray(data)) {
         setSuppliers(data);
       } else {
@@ -30,7 +30,7 @@ const Dealer = () => {
   const addSupplier = async () => {
     if (!newSupplier.name) return alert("Please enter a name");
     try {
-      await axios.post("http://localhost:5000/api/suppliers/add", newSupplier);
+      await axios.post("https://uskiilbook.onrender.com/api/suppliers/add", newSupplier);
       setNewSupplier({ name: "", balance: 0 });
       fetchSuppliers(); // Refresh list
     } catch (error) {
@@ -43,7 +43,7 @@ const Dealer = () => {
     if (!selectedSupplier || transactionAmount <= 0) return alert("Enter valid details");
 
     try {
-      await axios.put("http://localhost:5000/api/suppliers/update", {
+      await axios.put("https://uskiilbook.onrender.com/api/suppliers/update", {
         supplierId: selectedSupplier,
         amount: type === "add" ? transactionAmount : -transactionAmount,
       });
@@ -58,7 +58,7 @@ const Dealer = () => {
   // Delete a supplier
   const deleteSupplier = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/suppliers/delete/${id}`);
+      await axios.delete(`https://uskiilbook.onrender.com/api/suppliers/delete/${id}`);
       fetchSuppliers(); // Refresh after deletion
     } catch (error) {
       console.error("Error deleting supplier:", error);

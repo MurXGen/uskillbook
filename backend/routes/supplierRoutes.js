@@ -24,22 +24,38 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// Update supplier balance
 router.put("/update", async (req, res) => {
-  const { supplierId, amount } = req.body;
-  try {
-    const supplier = await Supplier.findById(supplierId);
-    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
-
-    supplier.balance += amount;
-    supplier.transactions.push({ amount });
-    await supplier.save();
-
-    res.json({ message: "Supplier balance updated" });
-  } catch (error) {
-    res.status(500).json({ error: "Error updating balance" });
-  }
-});
+    try {
+      const { supplierId, price, operation } = req.body; // Extract data
+  
+      if (!supplierId || !price || !operation) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+  
+      // Find supplier
+      const supplier = await Supplier.findById(supplierId);
+      if (!supplier) {
+        return res.status(404).json({ error: "Supplier not found" });
+      }
+  
+      // Update balance based on operation
+      if (operation === "add") {
+        supplier.balance += price;
+      } else if (operation === "subtract") {
+        supplier.balance -= price;
+      } else {
+        return res.status(400).json({ error: "Invalid operation" });
+      }
+  
+      await supplier.save();
+      res.status(200).json({ message: "Balance updated successfully", supplier });
+  
+    } catch (error) {
+      console.error("Error updating balance:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+  
 
 // Delete supplier
 router.delete("/delete/:id", async (req, res) => {
