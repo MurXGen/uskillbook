@@ -3,13 +3,13 @@ const router = express.Router();
 const {
   getSuppliers,
   addSupplier,
-  updateBalance,
+  updateSupplierBalance,
   deleteSupplier,
 } = require("../controllers/supplierController");
 
 router.get("/", getSuppliers);
 router.post("/", addSupplier);
-router.put("/:supplierId", updateBalance);
-router.delete("/:supplierId", deleteSupplier);
+router.put("/:id", updateSupplierBalance);
+router.delete("/:id", deleteSupplier);
 
 module.exports = router;

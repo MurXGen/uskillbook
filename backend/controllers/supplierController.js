@@ -10,7 +10,7 @@ exports.getSuppliers = async (req, res) => {
   }
 };
 
-// Add new supplier
+// Add a new supplier
 exports.addSupplier = async (req, res) => {
   try {
     const { name, balance } = req.body;
@@ -22,18 +22,19 @@ exports.addSupplier = async (req, res) => {
   }
 };
 
-// Update balance (Add or Subtract)
-exports.updateBalance = async (req, res) => {
+// Update supplier balance (Add/Subtract with transaction log)
+exports.updateSupplierBalance = async (req, res) => {
   try {
-    const { supplierId } = req.params;
     const { amount } = req.body;
-    
-    const supplier = await Supplier.findById(supplierId);
-    if (!supplier) return res.status(404).json({ message: "Supplier not found" });
+    const supplier = await Supplier.findById(req.params.id);
+
+    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+
+    const transactionType = amount >= 0 ? "Added" : "Subtracted";
 
     supplier.balance += amount;
-    supplier.transactions.push({ amount });
-    
+    supplier.transactions.push({ amount, type: transactionType });
+
     await supplier.save();
     res.json(supplier);
   } catch (err) {
@@ -44,9 +45,8 @@ exports.updateBalance = async (req, res) => {
 // Delete supplier
 exports.deleteSupplier = async (req, res) => {
   try {
-    const { supplierId } = req.params;
-    await Supplier.findByIdAndDelete(supplierId);
-    res.json({ message: "Supplier deleted" });
+    await Supplier.findByIdAndDelete(req.params.id);
+    res.json({ message: "Supplier deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

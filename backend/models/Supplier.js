@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 
-const supplierSchema = new mongoose.Schema({
+const SupplierSchema = new mongoose.Schema({
   name: { type: String, required: true },
   balance: { type: Number, default: 0 },
   transactions: [
     {
       amount: Number,
-      date: { type: Date, default: Date.now },
-    },
-  ],
+      type: { type: String, enum: ["Added", "Subtracted"] },
+      date: { type: Date, default: Date.now }
+    }
+  ]
 });
 
-module.exports = mongoose.model("Supplier", supplierSchema);
+module.exports = mongoose.model("Supplier", SupplierSchema);
