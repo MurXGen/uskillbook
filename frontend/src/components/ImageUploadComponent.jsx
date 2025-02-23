@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "../checkout.css";
+import axios from 'axios';
 
 const ImageUploadComponent = ({
   image,
@@ -181,6 +182,7 @@ const ImageUploadComponent = ({
           arrow_right_alt
         </span>
       </button>
+      
     </div>
   </>);
 };

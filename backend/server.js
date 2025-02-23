@@ -3,7 +3,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const orderRoutes = require("./routes/orderRoutes");
-const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -22,15 +21,6 @@ app.use(
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// // Parse JSON and URL-encoded form data
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true })); 
-
-// //phonepe Route
-// const phonepeRoute = require('./routes/phonepeRoute')
-// app.use("/api", phonepeRoute);
-
-
 // Routes
 app.use("/api/orders", orderRoutes);
 
@@ -40,7 +30,7 @@ app.get("/", (req, res) => {
 
 // Database Connection
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
