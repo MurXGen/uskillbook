@@ -24,16 +24,22 @@ const SupplierList = ({ refresh }) => {
   return (
     <div className="supplier-container">
       {suppliers.map((supplier, index) => (
-        <motion.div 
-          key={supplier._id} 
+        <motion.div
+          key={supplier._id}
           className="supplier-box"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
           <div className="supplierAction">
-            <p><strong>{supplier.name}</strong> - ₹{supplier.balance}</p>
-            <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
+            <p>
+              <strong>{supplier.name}</strong>
+              :
+              <span>₹{supplier.balance}</span>
+            </p>
+            <span onClick={() => deleteSupplier(supplier._id)} class="material-symbols-outlined deleteSupplier">
+              person_remove
+            </span>
           </div>
 
           <div className="transaction-history">
@@ -41,8 +47,8 @@ const SupplierList = ({ refresh }) => {
             {supplier.transactions.length > 0 ? (
               supplier.transactions.map((txn, i) => (
                 <div key={i} className="transaction-item">
-                  <span className="txn-type">{txn.type || "Hello"}</span>
-                  <span className="txn-amount">₹{txn.amount || "5200"}</span>
+                  <span className="txn-type">{txn.type || "-"}</span>
+                  <span className="txn-amount">₹{txn.amount || "-"}</span>
                   <span className="txn-reason">"{txn.reason || "-"}"</span>
                   <span className="txn-date">{txn.date ? new Date(txn.date).toLocaleString() : "-"}</span>
                 </div>
