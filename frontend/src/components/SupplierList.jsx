@@ -1,31 +1,43 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers"; // Updated API base URL
+
 const SupplierList = ({ refresh }) => {
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/suppliers")
-      .then(res => setSuppliers(res.data))
-      .catch(err => console.log(err));
+    axios
+      .get(API_BASE_URL)
+      .then((res) => setSuppliers(res.data))
+      .catch((err) => console.log("Error fetching suppliers:", err));
   }, [refresh]);
 
   const deleteSupplier = (id) => {
-    axios.delete(`http://localhost:5000/api/suppliers/${id}`)
+    axios
+      .delete(`${API_BASE_URL}/${id}`)
       .then(() => {
-        setSuppliers(suppliers.filter(s => s._id !== id));
+        setSuppliers((prevSuppliers) =>
+          prevSuppliers.filter((s) => s._id !== id)
+        );
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log("Error deleting supplier:", err));
   };
 
   return (
     <div>
-      {suppliers.map((supplier) => (
-        <div key={supplier._id}>
-          <p>{supplier.name} - ₹{supplier.balance}</p>
-          <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
-        </div>
-      ))}
+      {suppliers.length > 0 ? (
+        suppliers.map((supplier) => (
+          <div key={supplier._id}>
+            <p>
+              {supplier.name} - ₹{supplier.balance}
+            </p>
+            <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
+          </div>
+        ))
+      ) : (
+        <p>No suppliers available.</p>
+      )}
     </div>
   );
 };
