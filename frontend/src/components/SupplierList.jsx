@@ -28,8 +28,9 @@ const SupplierList = ({ refresh }) => {
 
   const deleteTransaction = (supplierId, txnId, txnAmount) => {
     axios.delete(`${API_BASE_URL}/${supplierId}/transactions/${txnId}`)
-      .then(() => {
-        // Update UI by filtering out the deleted transaction
+      .then((res) => {
+        console.log("Transaction deleted successfully:", res.data);
+        
         setSuppliers(prevSuppliers =>
           prevSuppliers.map(supplier => {
             if (supplier._id === supplierId) {
@@ -45,6 +46,7 @@ const SupplierList = ({ refresh }) => {
       })
       .catch(err => console.log("Error deleting transaction:", err));
   };
+    
 
   return (
     <div className="supplier-container">
