@@ -31,22 +31,22 @@ const SupplierList = ({ refresh }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-            <div className="supplierAction">
+          <div className="supplierAction">
             <p><strong>{supplier.name}</strong> - ₹{supplier.balance}</p>
             <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
-            </div>
-          
+          </div>
 
           <div className="transaction-history">
             <h4>Transaction History:</h4>
             {supplier.transactions.length > 0 ? (
-              <ul>
-                {supplier.transactions.map((txn, i) => (
-                  <li key={i}>
-                    {txn.type} ₹{txn.amount} for "{txn.reason}" on {new Date(txn.date).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
+              supplier.transactions.map((txn, i) => (
+                <div key={i} className="transaction-item">
+                  <span className="txn-type">{txn.type || "Hello"}</span>
+                  <span className="txn-amount">₹{txn.amount || "5200"}</span>
+                  <span className="txn-reason">"{txn.reason || "-"}"</span>
+                  <span className="txn-date">{txn.date ? new Date(txn.date).toLocaleString() : "-"}</span>
+                </div>
+              ))
             ) : (
               <p>No transactions yet.</p>
             )}

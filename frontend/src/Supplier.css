@@ -1,8 +1,8 @@
 .supplier-container {
     margin: 24px 20px;
-    display: flex
-;
+    display: flex;
     flex-direction: column;
+    gap: 24px;
 }
 
 .supplier-box {
@@ -15,18 +15,17 @@
     transition: transform .3sease-in-out;
 }
 
-.supplier-box > .supplierAction{
-display: flex;
-justify-content: space-between;
-gap: 12px;
+.supplier-box>.supplierAction {
+    display: grid;
+    grid-template-columns: 70% 30%;
 }
 
 .supplier-box:hover {
     transform: scale(1.05);
 }
 
-.transaction-history{
-    display: flex;
+.transaction-history {
+    
 }
 
 button {
@@ -102,18 +101,15 @@ select {
     justify-content: space-between;
 }
 
-.transaction-form div .plus,.minus {
+.transaction-form div .plus,
+.minus {
     font-size: 24px;
 }
 
 .transaction-form div .amountInput {
-font-size: 24px;
-font-weight: 900;
-text-align: center;
-color: #007bff;
-border: 0;
+    font-size: 24px;
+    font-weight: 900;
+    text-align: center;
+    color: #007bff;
+    border: 0;
 }
-
-
-
-
