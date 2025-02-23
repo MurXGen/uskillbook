@@ -6,6 +6,7 @@ const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers";
 
 const SupplierList = ({ refresh }) => {
   const [suppliers, setSuppliers] = useState([]);
+  const [expandedTxn, setExpandedTxn] = useState(null); // To track expanded transactions
 
   useEffect(() => {
     axios.get(API_BASE_URL)
@@ -21,6 +22,10 @@ const SupplierList = ({ refresh }) => {
       .catch(err => console.log("Error deleting supplier:", err));
   };
 
+  const toggleTxnReason = (index) => {
+    setExpandedTxn(expandedTxn === index ? null : index); // Toggle state
+  };
+
   return (
     <div className="supplier-container">
       {suppliers.map((supplier, index) => (
@@ -34,10 +39,12 @@ const SupplierList = ({ refresh }) => {
           <div className="supplierAction">
             <p>
               <strong>{supplier.name} :</strong>
-              
               <span>₹{supplier.balance}</span>
             </p>
-            <span onClick={() => deleteSupplier(supplier._id)} class="material-symbols-outlined deleteSupplier">
+            <span
+              onClick={() => deleteSupplier(supplier._id)}
+              className="material-symbols-outlined deleteSupplier"
+            >
               person_remove
             </span>
           </div>
@@ -46,10 +53,24 @@ const SupplierList = ({ refresh }) => {
             <h4>Transaction History:</h4>
             {supplier.transactions.length > 0 ? (
               supplier.transactions.map((txn, i) => (
-                <div key={i} className="transaction-item">
+                <div
+                  key={i}
+                  className="transaction-item"
+                  onClick={() => toggleTxnReason(`${supplier._id}-${i}`)}
+                >
                   <span className="txn-type">{txn.type || "-"}</span>
                   <span className="txn-amount">₹{txn.amount || "-"}</span>
-                  <span className="txn-reason">"{txn.reason || "-"}"</span>
+                  
+                  {/* Reason with smooth motion animation */}
+                  <motion.span
+                    className="txn-reason"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={expandedTxn === `${supplier._id}-${i}` ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    "{txn.reason || "-"}"
+                  </motion.span>
+
                   <span className="txn-date">{txn.date ? new Date(txn.date).toLocaleString() : "-"}</span>
                 </div>
               ))
