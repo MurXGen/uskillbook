@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers";
 
@@ -21,35 +22,34 @@ const SupplierList = ({ refresh }) => {
   };
 
   return (
-    <div>
-      {suppliers.length > 0 ? (
-        suppliers.map((supplier) => (
-          <div key={supplier._id}>
-            <p>
-              <strong>{supplier.name}</strong> - ₹{supplier.balance}
-            </p>
-            <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
+    <div className="supplier-container">
+      {suppliers.map((supplier, index) => (
+        <motion.div 
+          key={supplier._id} 
+          className="supplier-box"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+        >
+          <p><strong>{supplier.name}</strong> - ₹{supplier.balance}</p>
+          <button onClick={() => deleteSupplier(supplier._id)}>Delete</button>
 
-            {/* Display Transaction History */}
-            <div>
-              <h4>Transaction History:</h4>
-              {supplier.transactions.length > 0 ? (
-                <ul>
-                  {supplier.transactions.map((txn, index) => (
-                    <li key={index}>
-                      {txn.type} ₹{txn.amount} on {new Date(txn.date).toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No transactions yet.</p>
-              )}
-            </div>
+          <div className="transaction-history">
+            <h4>Transaction History:</h4>
+            {supplier.transactions.length > 0 ? (
+              <ul>
+                {supplier.transactions.map((txn, i) => (
+                  <li key={i}>
+                    {txn.type} ₹{txn.amount} for "{txn.reason}" on {new Date(txn.date).toLocaleString()}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No transactions yet.</p>
+            )}
           </div>
-        ))
-      ) : (
-        <p>No suppliers available.</p>
-      )}
+        </motion.div>
+      ))}
     </div>
   );
 };

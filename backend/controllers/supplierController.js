@@ -24,23 +24,24 @@ exports.addSupplier = async (req, res) => {
 
 // Update supplier balance (Add/Subtract with transaction log)
 exports.updateSupplierBalance = async (req, res) => {
-  try {
-    const { amount } = req.body;
-    const supplier = await Supplier.findById(req.params.id);
-
-    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
-
-    const transactionType = amount >= 0 ? "Added" : "Subtracted";
-
-    supplier.balance += amount;
-    supplier.transactions.push({ amount, type: transactionType });
-
-    await supplier.save();
-    res.json(supplier);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+    try {
+      const { amount, reason } = req.body;
+      const supplier = await Supplier.findById(req.params.id);
+  
+      if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+  
+      const transactionType = amount >= 0 ? "Added" : "Subtracted";
+  
+      supplier.balance += amount;
+      supplier.transactions.push({ amount, type: transactionType, reason });
+  
+      await supplier.save();
+      res.json(supplier);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
 
 // Delete supplier
 exports.deleteSupplier = async (req, res) => {

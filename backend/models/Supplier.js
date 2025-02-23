@@ -7,6 +7,7 @@ const SupplierSchema = new mongoose.Schema({
     {
       amount: Number,
       type: { type: String, enum: ["Added", "Subtracted"] },
+      reason: { type: String, required: true },
       date: { type: Date, default: Date.now }
     }
   ]
