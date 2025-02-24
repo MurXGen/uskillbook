@@ -60,11 +60,17 @@ const NeedOrders = () => {
 
   return (
     <div className="need-orders">
-      <h2>Request a Book</h2>
+      <h2 style={{ color: 'White' }}>Request a Book</h2>
       <form onSubmit={handleSubmit} className="query-form">
         <input type="text" placeholder="Book Name" value={bookName} onChange={(e) => setBookName(e.target.value)} required />
         <input type="text" placeholder="Mobile Number" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} required />
-        <input type="date" value={requiredDate} onChange={(e) => setRequiredDate(e.target.value)} required />
+        <label className="date-label">Select Order Date:</label>
+        <input
+          type="date"
+          value={requiredDate}
+          onChange={(e) => setRequiredDate(e.target.value)}
+          required
+        />
         <button type="submit">Submit</button>
       </form>
 
@@ -76,27 +82,24 @@ const NeedOrders = () => {
             whileTap={{ scale: 1.05 }}
             onClick={() => setSelectedQuery(query)}
           >
-            <p><b>{query.bookName}</b></p>
-            <p>📞 {query.mobileNumber}</p>
-            <p>📅 {query.requiredDate}</p>
+            <div className="userData">
+              <span><b>{query.bookName}</b></span>
+              <span>📞 {query.mobileNumber}</span>
+            </div>
+            <div className="dateAction">
+              <span>📅 {query.requiredDate}</span>
+              <button onClick={() => handleDelete(selectedQuery._id)}>
+                <span class="material-symbols-outlined">
+                  delete
+                </span>
+              </button>
+            </div>
+
           </motion.div>
         ))}
       </div>
 
-      {/* Pop-out edit & delete options */}
-      <AnimatePresence>
-        {selectedQuery && (
-          <motion.div
-            className="query-options"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 20, opacity: 0 }}
-          >
-            <button onClick={() => handleDelete(selectedQuery._id)}>Delete</button>
-            <button onClick={() => alert("Edit functionality coming soon!")}>Edit</button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 };
