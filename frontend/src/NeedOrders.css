@@ -96,16 +96,12 @@
     gap: 4px;
   }
   
-  .userData span {
-    font-size: 14px;
-  }
-  
   .userData b {
     color: bisque;
     font-size: 16px;
   }
   
-  .userData span:nth-child(2) { /* Mobile Number */
+  .userData span {
     color: aliceblue;
     font-size: 12px;
   }
@@ -114,7 +110,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
   }
   
   .dateAction span {
@@ -123,7 +119,7 @@
   }
   
   .dateAction button {
-    background: red;
+    background: transparent;
     border: none;
     border-radius: 50%;
     padding: 8px;
@@ -132,7 +128,7 @@
   }
   
   .dateAction button:hover {
-    background: darkred;
+    background: rgba(255, 0, 0, 0.5); /* Light red on hover */
   }
   
   .dateAction button .material-symbols-outlined {

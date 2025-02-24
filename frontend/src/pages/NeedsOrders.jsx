@@ -84,10 +84,10 @@ const NeedOrders = () => {
           >
             <div className="userData">
               <span><b>{query.bookName}</b></span>
-              <span>📞 {query.mobileNumber}</span>
+              <span>{query.mobileNumber}</span>
             </div>
             <div className="dateAction">
-              <span>📅 {query.requiredDate}</span>
+              <span>{query.requiredDate}</span>
               <button onClick={() => handleDelete(selectedQuery._id)}>
                 <span class="material-symbols-outlined">
                   delete
