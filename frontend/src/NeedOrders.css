@@ -63,6 +63,81 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    
+
   }
+
+
+  .queries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 24px 0px;
+  }
+  
+  .query-item {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.18); /* Light transparent white */
+    padding: 32px;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .query-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+  }
+  
+  .userData {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 4px;
+  }
+  
+  .userData span {
+    font-size: 14px;
+  }
+  
+  .userData b {
+    color: bisque;
+    font-size: 16px;
+  }
+  
+  .userData span:nth-child(2) { /* Mobile Number */
+    color: aliceblue;
+    font-size: 12px;
+  }
+  
+  .dateAction {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .dateAction span {
+    color: white;
+    font-size: 16px;
+  }
+  
+  .dateAction button {
+    background: red;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .dateAction button:hover {
+    background: darkred;
+  }
+  
+  .dateAction button .material-symbols-outlined {
+    color: white;
+    font-size: 18px;
+  }
+  
   
