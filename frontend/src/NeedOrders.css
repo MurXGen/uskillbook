@@ -46,6 +46,7 @@
     display: flex;
     gap: 10px;
   }
+
   
   .query-options button:first-child {
     background: red;

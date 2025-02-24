@@ -71,7 +71,16 @@ const NeedOrders = () => {
           onChange={(e) => setRequiredDate(e.target.value)}
           required
         />
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          style={{
+            gridColumnStart: 1,
+            gridColumnEnd: 3
+          }}
+        >
+          Submit
+        </button>
+
       </form>
 
       <div className="queries-list">
