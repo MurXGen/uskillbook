@@ -73,10 +73,6 @@ const NeedOrders = () => {
         />
         <button
           type="submit"
-          style={{
-            gridColumnStart: 1,
-            gridColumnEnd: 3
-          }}
         >
           Submit
         </button>

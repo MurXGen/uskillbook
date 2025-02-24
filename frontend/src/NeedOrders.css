@@ -3,38 +3,37 @@
     margin: auto;
     padding: 20px;
     text-align: center;
-  }
+}
 
-  .query-form{
-    display: grid
-;
+.query-form {
+    display: grid;
     gap: 12px;
-    grid-template-columns: auto auto;
-  }
-  
-  .query-form input, .query-form button {
-    padding: 16px 14px;
-  }
+}
 
-  .query-form input::placeholder{
+.query-form input,
+.query-form button {
+    padding: 16px 14px;
+}
+
+.query-form input::placeholder {
     font-family: 'poppins';
     font-weight: 600;
-  }
-  
-  .query-item {
+}
+
+.query-item {
     background: #f5f5f5;
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
-  }
-  
-  .query-item:hover {
+}
+
+.query-item:hover {
     background: #e0e0e0;
-  }
-  
-  .query-options {
+}
+
+.query-options {
     position: fixed;
     bottom: 50px;
     left: 50%;
@@ -45,97 +44,110 @@
     border-radius: 5px;
     display: flex;
     gap: 10px;
-  }
+}
 
-  
-  .query-options button:first-child {
+
+.query-options button:first-child {
     background: red;
     color: white;
-  }
-  
-  .query-options button:last-child {
+}
+
+.query-options button:last-child {
     background: blue;
     color: white;
-  }
+}
 
-  .date-label {
+.date-label {
     color: #f5f5f5;
-    font-weight: bold;
+    font-weight: 700;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    /* margin-top: -22px; */
+    position: relative;
+    top: 23px;
+    background: #007bffa6;
+    padding: 10px 20px;
+    max-width: fit-content;
+    font-size: 12px;
+    border-radius: 18px 0px;
+    margin: auto;
+    margin-top: -20px;
+    /* border: blanchedalmond; */
+    FONT-WEIGHT: 600;
 
-  }
+}
 
 
-  .queries-list {
+.queries-list {
     display: flex;
     flex-direction: column;
     gap: 24px;
     margin: 24px 0px;
-  }
-  
-  .query-item {
+}
+
+.query-item {
     display: flex;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.18); /* Light transparent white */
+    background: rgba(255, 255, 255, 0.18);
+    /* Light transparent white */
     padding: 32px;
     border-radius: 8px;
     transition: background 0.3s, transform 0.2s ease-in-out;
     cursor: pointer;
-  }
-  
-  .query-item:hover {
+}
+
+.query-item:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.02);
-  }
-  
-  .userData {
+}
+
+.userData {
     display: flex;
     flex-direction: column;
     align-items: baseline;
     gap: 4px;
-  }
-  
-  .userData b {
+}
+
+.userData b {
     color: bisque;
     font-size: 16px;
-  }
-  
-  .userData span {
+}
+
+.userData span {
     color: aliceblue;
     font-size: 12px;
-  }
-  
-  .dateAction {
+}
+
+.dateAction {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 6px;
-  }
-  
-  .dateAction span {
+}
+
+.dateAction span {
     font-size: 12px;
     width: 100%;
     min-width: fit-content;
     color: white;
-  }
-  
-  .dateAction button {
+}
+
+.dateAction button {
     background: #007bff;
     border: none;
     border-radius: 50%;
     padding: 12px 12px;
     cursor: pointer;
     transition: background 0.3s ease;
-  }
-  
-  .dateAction button:hover {
-    background: rgba(255, 0, 0, 0.5); /* Light red on hover */
-  }
-  
-  .dateAction button .material-symbols-outlined {
+}
+
+.dateAction button:hover {
+    background: rgba(255, 0, 0, 0.5);
+    /* Light red on hover */
+}
+
+.dateAction button .material-symbols-outlined {
     color: white;
     font-size: 18px;
-  }
-  
+}
