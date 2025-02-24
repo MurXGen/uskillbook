@@ -1,0 +1,49 @@
+.need-orders {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .query-form input, .query-form button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+  }
+  
+  .query-item {
+    background: #f5f5f5;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .query-item:hover {
+    background: #e0e0e0;
+  }
+  
+  .query-options {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .query-options button:first-child {
+    background: red;
+    color: white;
+  }
+  
+  .query-options button:last-child {
+    background: blue;
+    color: white;
+  }
+  
