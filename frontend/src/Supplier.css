@@ -48,7 +48,7 @@ margin: 24px 0;
 
 .transaction-history {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
     gap: 24px;
     overflow-x: scroll;
@@ -225,22 +225,33 @@ select {
 
 
 .transaction-summary {
-    margin: 20px 0;
-    padding: 15px;
-    background: #f4f4f4;
-    border-radius: 10px;
+    margin: 24px 20px;
+    padding: 12px;
+    background: #ffffff33;
+    border-radius: 12px;
   }
   
   .transaction-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: flex
+;
+    flex-direction: row;
+    gap: 12px;
   }
   
   .transaction-day {
     padding: 10px;
     border: 1px solid #ddd;
-    background: white;
+    background: #fff;
     border-radius: 5px;
+    font-size: 12px;
+  }
+
+  .transaction-day h3{
+    background: #faebd7;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid grey;
+    font-size: 12px;
+    margin-top: -32px;
   }
   

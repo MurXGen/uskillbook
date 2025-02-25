@@ -65,7 +65,6 @@ const TransactionHistory = () => {
 
   return (
     <div className="transaction-container">
-      <h2>Transaction History</h2>
       <div className="orders-grid">
         {orders.map((order, index) => (
           <motion.div
