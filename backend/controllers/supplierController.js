@@ -54,28 +54,28 @@ exports.deleteSupplier = async (req, res) => {
 };
 
 
-// exports.getTransactionsByDate = async (req, res) => {
-//   try {
-//     const suppliers = await Supplier.find();
-//     const transactionsByDate = {};
+exports.getTransactionsByDate = async (req, res) => {
+  try {
+    const suppliers = await Supplier.find();
+    const transactionsByDate = {};
 
-//     suppliers.forEach((supplier) => {
-//       supplier.transactions.forEach((txn) => {
-//         const dateKey = new Date(txn.date).toISOString().split("T")[0]; // Format: YYYY-MM-DD
-//         if (!transactionsByDate[dateKey]) {
-//           transactionsByDate[dateKey] = { added: 0, subtracted: 0 };
-//         }
+    suppliers.forEach((supplier) => {
+      supplier.transactions.forEach((txn) => {
+        const dateKey = new Date(txn.date).toISOString().split("T")[0]; // Format: YYYY-MM-DD
+        if (!transactionsByDate[dateKey]) {
+          transactionsByDate[dateKey] = { added: 0, subtracted: 0 };
+        }
 
-//         if (txn.type === "Added") {
-//           transactionsByDate[dateKey].added += txn.amount;
-//         } else if (txn.type === "Subtracted") {
-//           transactionsByDate[dateKey].subtracted += txn.amount;
-//         }
-//       });
-//     });
+        if (txn.type === "Added") {
+          transactionsByDate[dateKey].added += txn.amount;
+        } else if (txn.type === "Subtracted") {
+          transactionsByDate[dateKey].subtracted += txn.amount;
+        }
+      });
+    });
 
-//     res.json(transactionsByDate);
-//   } catch (err) {
-//     res.status(500).json({ error: "Error fetching transactions" });
-//   }
-// };
+    res.json(transactionsByDate);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching transactions" });
+  }
+};

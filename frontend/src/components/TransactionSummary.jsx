@@ -32,12 +32,7 @@ const TransactionSummary = () => {
               <h3>{new Date(date).toLocaleDateString()}</h3>
               <p><strong>Total Added:</strong> ₹{data.totalAdded}</p>
               <p><strong>Total Subtracted:</strong> ₹{data.totalSubtracted}</p>
-              <h4>Suppliers Involved:</h4>
-              <ul>
-                {data.suppliers.map(supplier => (
-                  <li key={supplier._id}>{supplier.name}</li>
-                ))}
-              </ul>
+            
             </motion.div>
           ))
       )}
