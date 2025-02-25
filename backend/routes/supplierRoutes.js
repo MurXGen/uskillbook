@@ -13,6 +13,7 @@ router.put("/:id", updateSupplierBalance);
 router.delete("/:id", deleteSupplier);
 router.get("/transactions-by-date", async (req, res) => {
   try {
+    // Fetch all suppliers that have at least one transaction
     const suppliers = await Supplier.find({ "transactions.0": { $exists: true } });
 
     let transactionsByDate = {};
@@ -21,8 +22,9 @@ router.get("/transactions-by-date", async (req, res) => {
       supplier.transactions.forEach((transaction) => {
         if (!transaction.date) return;
 
-        const date = new Date(transaction.date).toISOString().split("T")[0]; // Format date
+        const date = new Date(transaction.date).toISOString().split("T")[0]; // Format date as YYYY-MM-DD
 
+        // Initialize date if not present
         if (!transactionsByDate[date]) {
           transactionsByDate[date] = {
             totalAdded: 0,
@@ -31,14 +33,15 @@ router.get("/transactions-by-date", async (req, res) => {
           };
         }
 
+        // Sum amounts by type
         if (transaction.type === "Added") {
           transactionsByDate[date].totalAdded += transaction.amount;
-        } else {
+        } else if (transaction.type === "Subtracted") {
           transactionsByDate[date].totalSubtracted += transaction.amount;
         }
 
-        // Add supplier details if not already included for that date
-        if (!transactionsByDate[date].suppliers.find((s) => s._id.toString() === supplier._id.toString())) {
+        // Check if supplier is already added for that date
+        if (!transactionsByDate[date].suppliers.some(s => s._id.toString() === supplier._id.toString())) {
           transactionsByDate[date].suppliers.push({
             _id: supplier._id,
             name: supplier.name,
@@ -53,6 +56,5 @@ router.get("/transactions-by-date", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;
