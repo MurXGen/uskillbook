@@ -3,6 +3,7 @@ import { motion } from "framer-motion"; // Import motion
 import AddSupplier from "../components/AddSupplier.jsx";
 import SupplierList from "../components/SupplierList.jsx";
 import SupplierTransaction from "../components/SupplierTransaction.jsx";
+import TransactionSummary from "../components/TransactionSummary";
 import "../Supplier.css";
 
 const Dealer = () => {
@@ -26,6 +27,7 @@ const Dealer = () => {
       </motion.div>
 
       <SupplierTransaction onTransaction={() => setRefresh(!refresh)} />
+      <TransactionSummary />
       <SupplierList refresh={refresh} />
     </div>
   );

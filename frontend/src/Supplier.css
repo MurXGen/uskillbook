@@ -222,3 +222,25 @@ select {
     color: #007bff;
     border: 0;
 }
+
+
+.transaction-summary {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f4f4f4;
+    border-radius: 10px;
+  }
+  
+  .transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .transaction-day {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+  }
+  
