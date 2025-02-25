@@ -5,6 +5,7 @@ const {
   addSupplier,
   updateSupplierBalance,
   deleteSupplier,
+  getTransactionsByDate,
 } = require("../controllers/supplierController");
 
 router.get("/", getSuppliers);
