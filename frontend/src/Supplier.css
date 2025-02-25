@@ -2,6 +2,10 @@ body {
     font-family: 'poppins';
 }
 
+.showAddSupplier{
+margin: 24px 0;
+}
+
 .supplier-container {
     margin: 24px 20px;
     display: flex;
