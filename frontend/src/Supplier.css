@@ -28,6 +28,12 @@ margin: 24px 0;
     align-items: center;
     justify-content: space-between;
     padding: 12px;
+    transition-duration: 0.3s;
+}
+
+.supplier-box .supplierAction:hover .deleteSupplier {
+display: block;
+transition: 0.3s;
 }
 
 .supplier-box>.supplierAction p {
@@ -123,6 +129,7 @@ margin: 24px 0;
 
 
 .supplierAction .deleteSupplier {
+    display: none;
     background-color: #007bff;
     color: #fff;
     padding: 6px;
