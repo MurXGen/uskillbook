@@ -21,7 +21,6 @@ const TransactionSummary = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h2>Daily Transaction Summary</h2>
       <div className="transaction-list">
         {Object.entries(transactions).map(([date, { added, subtracted }]) => (
           <div key={date} className="transaction-day">

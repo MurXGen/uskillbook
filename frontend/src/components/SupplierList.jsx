@@ -50,9 +50,6 @@ const SupplierList = ({ refresh }) => {
           </div>
 
           <div className="transaction-history">
-            <span class="material-symbols-outlined">
-              arrow_forward_ios
-            </span>
             {supplier.transactions.length > 0 ? (
               supplier.transactions.map((txn, i) => (
                 <div
