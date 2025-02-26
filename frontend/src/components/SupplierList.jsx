@@ -6,7 +6,7 @@ const API_BASE_URL = "https://uskillbook.onrender.com/api/suppliers";
 
 const SupplierList = ({ refresh }) => {
   const [suppliers, setSuppliers] = useState([]);
-  const [expandedTxn, setExpandedTxn] = useState(null); // To track expanded transactions
+  const [expandedTxn, setExpandedTxn] = useState(null); // Track expanded transactions
 
   useEffect(() => {
     axios.get(API_BASE_URL)
@@ -14,12 +14,23 @@ const SupplierList = ({ refresh }) => {
       .catch(err => console.log("Error fetching suppliers:", err));
   }, [refresh]);
 
-  const deleteSupplier = (id) => {
-    axios.delete(`${API_BASE_URL}/${id}`)
-      .then(() => {
-        setSuppliers(suppliers.filter(s => s._id !== id));
-      })
-      .catch(err => console.log("Error deleting supplier:", err));
+  const deleteSupplier = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this supplier?");
+
+    if (confirmDelete) {
+      const password = prompt("Enter password to confirm deletion:");
+      
+      if (password === "9731") {
+        try {
+          await axios.delete(`${API_BASE_URL}/${id}`);
+          setSuppliers(suppliers.filter(s => s._id !== id));
+        } catch (err) {
+          console.log("Error deleting supplier:", err);
+        }
+      } else {
+        alert("Incorrect password! Deletion cancelled.");
+      }
+    }
   };
 
   const toggleTxnReason = (index) => {
