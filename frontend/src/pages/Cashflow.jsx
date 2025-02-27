@@ -66,8 +66,8 @@ const Cashflow = () => {
   };
 
   return (
-    <div className="cashflow-wrapper">
-      <motion.div className="transaction-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <div className="cashflow">
+      <motion.div className="transactionForm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h2>Add Transaction</h2>
         <input type="text" value={itemName} onChange={handleItemChange} placeholder="Transaction Item Name" />
         {suggestions.length > 0 && (
@@ -85,7 +85,7 @@ const Cashflow = () => {
         <button onClick={addTransaction}>Add Transaction</button>
       </motion.div>
 
-      <div className="transaction-list">
+      <div className="transactionHistory">
         <h2>Transaction History</h2>
         {transactions.map((txn, index) => (
           <div key={index} className="transaction-item">
