@@ -203,7 +203,7 @@ button {
     border-radius: 12px;
 }
 
-.transaction-form>div>input,
+.supplier-container .transaction-form > div > input,
 button,
 select {
     padding: 20px;
