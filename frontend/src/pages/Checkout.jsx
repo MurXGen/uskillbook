@@ -12,7 +12,7 @@ const Checkout = () => {
   const [buyType, setBuyType] = useState("Buy");
 
   return (
-    <div className="container">
+    <div className="checkout_container">
       <AnimatePresence mode="wait">
         {step === 1 && (
           <motion.div key="price" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
