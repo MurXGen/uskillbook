@@ -1,0 +1,37 @@
+.transactionForm {
+    display: flex;
+    flex-direction: column;
+    margin: 24px 20px;
+    gap: 3px;
+}
+
+.transactionForm h2{
+    color: white;
+    text-align: center;
+}
+
+.transactionForm input {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 5px;
+}
+
+.transactionForm .suggestions::-webkit-scrollbar {
+    display: none;
+}
+
+.transactionForm .suggestions{
+    display: flex;
+    justify-content: flex-start;
+    padding: 12px;
+    flex-direction: row;
+    overflow-x: scroll;
+    list-style: none;
+}
+
+.transactionForm .suggestions li{
+    text-decoration: none;
+    padding: 12px;
+    min-width: 100px;
+    max-width: fit-content;
+}

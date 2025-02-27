@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import '../Cashflow.css'
 
 const API_BASE_URL = "https://uskillbook.onrender.com/api/transactions";
 
