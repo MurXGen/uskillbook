@@ -5,7 +5,7 @@
     gap: 3px;
 }
 
-.transactionForm h2{
+.transactionForm h2 {
     color: white;
     text-align: center;
 }
@@ -20,18 +20,29 @@
     display: none;
 }
 
-.transactionForm .suggestions{
+.transactionForm .suggestions {
     display: flex;
     justify-content: flex-start;
-    padding: 12px;
+    padding: 12px 0;
     flex-direction: row;
     overflow-x: scroll;
+    gap: 12px;
     list-style: none;
 }
 
-.transactionForm .suggestions li{
+.transactionForm .suggestions li {
     text-decoration: none;
     padding: 12px;
     min-width: 100px;
     max-width: fit-content;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 1px 8px #000000;
+}
+
+.transactionHistory {
+    margin: 24px 20px;
+    display: flex;
+    flex-direction: column;
+
 }
