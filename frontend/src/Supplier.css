@@ -54,7 +54,7 @@ transition: 0.3s;
 
 .transaction-history {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
     gap: 24px;
     overflow-x: scroll;
@@ -200,13 +200,12 @@ button {
     transform: none;
     padding: 24px;
     gap: 12px;
-    border-radius: 12px;
 }
 
-.transaction-form > div > input,
+.transaction-form>div>input,
 button,
 select {
-    padding: 20px;
+    padding: 12px;
     width: 100%;
 }
 
@@ -225,25 +224,18 @@ select {
 
 .transaction-form div .amountInput {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 900;
     text-align: center;
-    color: #ffffff;
+    color: #007bff;
     border: 0;
-    width: 400%;
-    background: #ffffff3b;
-}
-
-.transaction-form div .amountInput::placeholder {
-    color: white;
 }
 
 
 .transaction-summary {
     margin: 24px 20px;
-    padding: 32px 12px;
-    background: #fff3;
+    padding: 12px;
+    background: #ffffff33;
     border-radius: 12px;
-    overflow-x: scroll;
   }
   
   .transaction-list {
@@ -259,7 +251,6 @@ select {
     background: #fff;
     border-radius: 5px;
     font-size: 12px;
-    min-width: 130px;
   }
 
   .transaction-day h3{

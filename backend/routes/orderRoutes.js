@@ -1,24 +1,13 @@
 const express = require("express");
-const router = express.Router();
-const multer = require("multer");
+const upload = require("../middleware/upload");
 const { createOrder, getOrders, updateOrder, deleteOrder } = require("../controllers/orderController");
 
-// Configure multer for file upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Store files in `uploads/` folder
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+const router = express.Router();
 
-const upload = multer({ storage });
-
-// Order routes
-router.post("/orders", upload.single("image"), createOrder);
-router.get("/orders", getOrders);
-router.put("/orders/:id", updateOrder);
-router.delete("/orders/:id", deleteOrder);
+// Routes
+router.post("/", upload.single("image"), createOrder);
+router.get("/", getOrders);
+router.put("/:id", updateOrder);
+router.delete("/:id", deleteOrder);
 
 module.exports = router;
