@@ -36,4 +36,28 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Search Transactions by Query
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.query; // Get search query from URL
+    if (!query) {
+      return res.status(400).json({ error: "Query parameter is required" });
+    }
+
+    // Perform case-insensitive search in transactions
+    const transactions = await Transaction.find({
+      $or: [
+        { items: { $regex: query, $options: "i" } }, // Search in items
+        { date: { $regex: query, $options: "i" } } // Search in date
+      ]
+    });
+
+    res.json(transactions);
+  } catch (error) {
+    console.error("Error searching transactions:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 module.exports = router;
