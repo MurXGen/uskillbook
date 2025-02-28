@@ -2,6 +2,18 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/Transaction");
 
+// ✅ GET all transactions
+router.get("/", async (req, res) => {
+  try {
+    const transactions = await Transaction.find();
+    res.json(transactions);
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// ✅ POST a new transaction
 router.post("/", async (req, res) => {
   try {
     const { items, sellingPrice, date } = req.body;
@@ -13,13 +25,13 @@ router.post("/", async (req, res) => {
     const newTransaction = new Transaction({
       items,
       sellingPrice,
-      date: date || new Date(), // Set current date if not provided
+      date: date || new Date(),
     });
 
     await newTransaction.save();
     res.status(201).json(newTransaction);
   } catch (error) {
-    console.error("Transaction save error:", error);
+    console.error("Error saving transaction:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
