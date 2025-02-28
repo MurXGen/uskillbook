@@ -1,71 +1,70 @@
 .transaction-container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-  }
-  
-  .orders-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-  }
-  
-  .order-box {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .order-box:hover {
-    transform: scale(1.02);
-  }
-  
-  .order-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .order-details p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .order-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .edit-btn, .delete-btn, .save-btn {
-    border: none;
-    padding: 8px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 12px;
-  }
-  
-  .edit-btn {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .save-btn {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  select, input {
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.order-box {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.order-box:hover {
+  transform: scale(1.02);
+}
+
+.order-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.edit-btn, .delete-btn, .save-btn {
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+select, input {
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
