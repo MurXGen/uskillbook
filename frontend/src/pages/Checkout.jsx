@@ -1,45 +1,33 @@
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Navbar from '../components/Navbar'
-import Bag from '../assets/Bag.png'
-import '../index.css';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import PriceComponent from "../components/PriceComponent";
+import ImageUploadComponent from "../components/ImageUploadComponent";
+import "../checkout.css";
 
-function Dashboard() {
-  const navigate = useNavigate();
+const Checkout = () => {
+  const [step, setStep] = useState(1);
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
+  const [paymentMode, setPaymentMode] = useState("Online Mode");
+  const [buyType, setBuyType] = useState("Buy");
 
   return (
-    <>
-      <div className="dashboard">
-        {/* Pay Now start */}
-        <div className="payNow">
-          <div className="title">
-            <span className="desc">Powered by <strong>Razorpay</strong></span>
-            <span className="title">Make Seamless Payment with us</span>
-          </div>
-          <div className="features">
-            <div className="feature">
-              <span class="material-symbols-outlined">
-                check
-              </span>
-              <span>Track your payments</span>
-            </div>
-            <div className="feature">
-              <span class="material-symbols-outlined">
-                check
-              </span>
-              <span>Earn upto 10% worth cashback on every purchase</span>
-            </div>
-          </div>
-          <Link className="proceed" to='/checkout'>Proceed to Pay<span class="material-symbols-outlined">
-            arrow_right
-          </span></Link>
-        </div>
+    <div className="container">
+      <AnimatePresence mode="wait">
+        {step === 1 && (
+          <motion.div key="price" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+            <PriceComponent price={price} setPrice={setPrice} onNext={() => setStep(2)} />
+          </motion.div>
+        )}
 
-        {/* Pay Now end */}
-
-      </div>
-    </>
+        {step === 2 && (
+          <motion.div key="imageUpload" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+            <ImageUploadComponent image={image} setImage={setImage} price={price} paymentMode={paymentMode} setPaymentMode={setPaymentMode} buyType={buyType} setBuyType={setBuyType} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
-}
+};
 
-export default Dashboard;
+export default Checkout;
