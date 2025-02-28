@@ -12,7 +12,6 @@ const Cashflow = () => {
   const [date, setDate] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     axios.get(API_BASE_URL)
@@ -27,7 +26,7 @@ const Cashflow = () => {
     }
     
     try {
-      const res = await axios.get(${API_BASE_URL}/search?query=${query});
+      const res = await axios.get(`${API_BASE_URL}/search?query=${query}`);
       setSuggestions(res.data);
     } catch (err) {
       console.log("Error fetching suggestions:", err);
@@ -52,13 +51,9 @@ const Cashflow = () => {
       return;
     }
 
-    setLoading(true); // Start loading
-
     try {
       const newTransaction = { itemName, cost, sellingPrice, date };
       await axios.post(API_BASE_URL, newTransaction);
-      
-      // Update transaction list
       setTransactions([...transactions, newTransaction]);
       
       // Reset fields
@@ -68,13 +63,11 @@ const Cashflow = () => {
       setDate("");
     } catch (err) {
       console.log("Error adding transaction:", err);
-    } finally {
-      setLoading(false); // Stop loading
     }
   };
 
   return (
-    <div className="cashflow">
+    <div className="cashflow-wrapper">
       <motion.div className="transactionForm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h2>Add Transaction</h2>
         <input type="text" value={itemName} onChange={handleItemChange} placeholder="Transaction Item Name" />
@@ -90,26 +83,20 @@ const Cashflow = () => {
         <input type="number" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="Cost" />
         <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="Selling Price" />
         <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
-        
-        <button onClick={addTransaction} disabled={loading}>
-          {loading ? "Saving..." : "Add Transaction"}
-        </button>
+        <button onClick={addTransaction}>Add Transaction</button>
       </motion.div>
 
       <div className="transactionHistory">
         <h2>Transaction History</h2>
-        <div className="historyList">
         {transactions.map((txn, index) => (
           <div key={index} className="transaction-item">
             <p>{txn.itemName} - ₹{txn.cost} (Sold at ₹{txn.sellingPrice})</p>
             <small>{new Date(txn.date).toLocaleString()}</small>
           </div>
         ))}
-        </div>
-       
       </div>
     </div>
   );
 };
 
-export default Cashflow
+export default Cashflow;

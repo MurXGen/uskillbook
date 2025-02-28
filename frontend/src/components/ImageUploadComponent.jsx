@@ -18,6 +18,18 @@ const ImageUploadComponent = ({
   const [showBuyTypeDropdown, setShowBuyTypeDropdown] = useState(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerHeight < 500) {
+        setIsKeyboardOpen(true);
+      } else {
+        setIsKeyboardOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -37,59 +49,39 @@ const ImageUploadComponent = ({
 
   const handleSubmit = async () => {
     if (!image) {
-      alert("❌ Please upload an image.");
+      alert("Please upload an image.");
       return;
     }
-  
+
     setIsLoading(true);
-  
+
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("price", price);
+    formData.append("paymentMode", paymentMode);
+    formData.append("buyType", buyType);
+
     try {
-      // Convert image to Base64
-      const base64Image = await convertToBase64(image);
-  
-      const orderData = {
-        image: base64Image, // Send as Base64
-        price,
-        paymentMode,
-        buyType,
-      };
-  
-      console.log("📦 Sending Order Data:", orderData);
-  
       const response = await fetch("https://uskillbook.onrender.com/api/orders", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
+        body: formData,
       });
-  
+
       const data = await response.json();
-      console.log("📦 Response Data:", data);
-  
+      console.log(data);
+
       if (response.ok) {
         window.location.href = "https://uskillbook.vercel.app/checkout";
       } else {
-        alert("❌ Order failed. Try again.");
+        alert("Order failed. Try again.");
       }
     } catch (error) {
-      console.error("❌ Error submitting order:", error);
-      alert("❌ An error occurred.");
+      console.error(error);
+      alert("An error occurred.");
     } finally {
       setIsLoading(false);
     }
   };
-  
-  // Convert image to Base64
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-  
 
   return (
     <>
