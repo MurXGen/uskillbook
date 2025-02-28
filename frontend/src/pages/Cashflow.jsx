@@ -63,28 +63,32 @@ const Cashflow = () => {
       alert("Please add items and enter selling price.");
       return;
     }
-
+  
     setLoading(true);
-
+  
+    const newTransaction = {
+      items: basket,
+      sellingPrice,
+      date: date || new Date().toISOString(), // Use entered date or today's date
+    };
+  
+    console.log("🔍 Sending transaction data:", newTransaction);  // ✅ Debug log
+  
     try {
-      const newTransaction = {
-        items: basket,
-        sellingPrice,
-        date: date || new Date().toISOString(), // Use entered date or today's date
-      };
-
-      await axios.post(API_BASE_URL, newTransaction);
-
-      setTransactions([...transactions, newTransaction]);
+      const response = await axios.post(API_BASE_URL, newTransaction);
+      console.log("✅ Response from server:", response.data);  // ✅ Debug log
+  
+      setTransactions([...transactions, response.data]);
       setBasket([]);
       setSellingPrice("");
       setDate("");
     } catch (err) {
-      console.log("Error submitting transaction:", err);
+      console.error("❌ Error submitting transaction:", err.response?.data || err);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const groupTransactionsByDate = () => {
     if (!transactions || transactions.length === 0) return {}; // ✅ Prevents error
