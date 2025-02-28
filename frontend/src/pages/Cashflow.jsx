@@ -87,6 +87,8 @@ const Cashflow = () => {
   };
 
   const groupTransactionsByDate = () => {
+    if (!transactions || transactions.length === 0) return {}; // ✅ Prevents error
+
     const grouped = {};
     transactions.forEach((txn) => {
       const txnDate = new Date(txn.date).toLocaleDateString();
@@ -95,6 +97,7 @@ const Cashflow = () => {
       }
       grouped[txnDate].push(txn);
     });
+
     return grouped;
   };
 
@@ -130,7 +133,7 @@ const Cashflow = () => {
 
         <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="Total Selling Price" />
         <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
-        
+
         <button onClick={submitTransaction} disabled={loading}>
           {loading ? "Saving..." : "Submit Sale"}
         </button>
@@ -138,12 +141,12 @@ const Cashflow = () => {
 
       <div className="transactionHistory">
         <h2>Transaction History</h2>
-        {Object.keys(groupedTransactions).map((date, index) => (
+        {Object.keys(groupedTransactions || {}).map((date, index) => (
           <div key={index} className="transaction-box">
             <h3>{date}</h3>
-            {groupedTransactions[date].map((txn, idx) => (
+            {(groupedTransactions[date] || []).map((txn, idx) => (
               <div key={idx} className="transaction-item">
-                {txn.items.map((item, i) => (
+                {(txn.items || []).map((item, i) => (  // ✅ Prevents undefined error
                   <p key={i}>{item.itemName} - ₹{item.cost}</p>
                 ))}
                 <strong>Total Selling Price: ₹{txn.sellingPrice}</strong>
@@ -151,6 +154,7 @@ const Cashflow = () => {
             ))}
           </div>
         ))}
+
       </div>
     </div>
   );
