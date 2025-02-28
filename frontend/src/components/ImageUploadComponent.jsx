@@ -18,18 +18,6 @@ const ImageUploadComponent = ({
   const [showBuyTypeDropdown, setShowBuyTypeDropdown] = useState(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerHeight < 500) {
-        setIsKeyboardOpen(true);
-      } else {
-        setIsKeyboardOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

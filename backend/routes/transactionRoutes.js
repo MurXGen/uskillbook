@@ -1,23 +1,8 @@
 const express = require("express");
+const router = express.Router();
 const Transaction = require("../models/transactionModel");
 
-const router = express.Router();
-
-// Add multiple transactions
-router.post("/", async (req, res) => {
-  try {
-    const transactions = req.body.transactions.map(txn => ({
-      ...txn,
-      date: txn.date || new Date() // If no date provided, set current date
-    }));
-    const savedTransactions = await Transaction.insertMany(transactions);
-    res.status(201).json(savedTransactions);
-  } catch (err) {
-    res.status(500).json({ error: "Error saving transactions" });
-  }
-});
-
-// Get all transactions
+// Fetch all transactions
 router.get("/", async (req, res) => {
   try {
     const transactions = await Transaction.find().sort({ date: -1 });
@@ -27,15 +12,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Search for an item by name
-router.get("/search", async (req, res) => {
+// Add a new transaction
+router.post("/", async (req, res) => {
   try {
-    const query = req.query.query;
-    if (!query) return res.json([]);
-    const results = await Transaction.find({ itemName: new RegExp(query, "i") }).limit(5);
-    res.json(results);
+    const { items, sellingPrice, date } = req.body;
+    const newTransaction = new Transaction({
+      items,
+      sellingPrice,
+      date: date ? new Date(date) : new Date()
+    });
+    await newTransaction.save();
+    res.json({ message: "Transaction saved" });
   } catch (err) {
-    res.status(500).json({ error: "Error searching for items" });
+    res.status(500).json({ error: "Error saving transaction" });
   }
 });
 

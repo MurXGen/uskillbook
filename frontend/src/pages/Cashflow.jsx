@@ -6,9 +6,13 @@ import '../Cashflow.css';
 const API_BASE_URL = "https://uskillbook.onrender.com/api/transactions";
 
 const Cashflow = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [newTransactions, setNewTransactions] = useState([{ itemName: "", cost: "", sellingPrice: "" }]);
+  const [itemName, setItemName] = useState("");
+  const [cost, setCost] = useState("");
+  const [date, setDate] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [basket, setBasket] = useState([]); // Stores items before submitting
+  const [sellingPrice, setSellingPrice] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -17,64 +21,66 @@ const Cashflow = () => {
       .catch(err => console.log("Error fetching transactions:", err));
   }, []);
 
-  const fetchSuggestions = async (query, index) => {
+  const fetchSuggestions = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
       return;
     }
-    
+
     try {
       const res = await axios.get(`${API_BASE_URL}/search?query=${query}`);
-      setSuggestions({ index, data: res.data });
+      setSuggestions(res.data);
     } catch (err) {
       console.log("Error fetching suggestions:", err);
     }
   };
 
-  const handleItemChange = (e, index) => {
+  const handleItemChange = (e) => {
     const value = e.target.value;
-    const updatedTransactions = [...newTransactions];
-    updatedTransactions[index].itemName = value;
-    setNewTransactions(updatedTransactions);
-    fetchSuggestions(value, index);
+    setItemName(value);
+    fetchSuggestions(value);
   };
 
-  const selectSuggestion = (suggestion, index) => {
-    const updatedTransactions = [...newTransactions];
-    updatedTransactions[index].itemName = suggestion.itemName;
-    updatedTransactions[index].cost = suggestion.cost;
-    setNewTransactions(updatedTransactions);
+  const selectSuggestion = (suggestion) => {
+    setItemName(suggestion.itemName);
+    setCost(suggestion.cost);
     setSuggestions([]);
   };
 
-  const addNewTransactionField = () => {
-    setNewTransactions([...newTransactions, { itemName: "", cost: "", sellingPrice: "" }]);
+  const addItemToBasket = () => {
+    if (!itemName || !cost) {
+      alert("Please enter item name and cost.");
+      return;
+    }
+
+    setBasket([...basket, { itemName, cost }]);
+    setItemName("");
+    setCost("");
   };
 
-  const handleTransactionChange = (e, index, field) => {
-    const updatedTransactions = [...newTransactions];
-    updatedTransactions[index][field] = e.target.value;
-    setNewTransactions(updatedTransactions);
-  };
-
-  const addTransactions = async () => {
-    if (newTransactions.some(txn => !txn.itemName || !txn.sellingPrice)) {
-      alert("Please fill all required fields.");
+  const submitTransaction = async () => {
+    if (basket.length === 0 || !sellingPrice) {
+      alert("Please add items and enter selling price.");
       return;
     }
 
     setLoading(true);
-    const transactionsToSave = newTransactions.map(txn => ({
-      ...txn,
-      date: new Date().toISOString()
-    }));
 
     try {
-      await axios.post(API_BASE_URL, { transactions: transactionsToSave });
-      setTransactions([...transactions, ...transactionsToSave]);
-      setNewTransactions([{ itemName: "", cost: "", sellingPrice: "" }]); // Reset fields
+      const newTransaction = {
+        items: basket,
+        sellingPrice,
+        date: date || new Date().toISOString(), // Use entered date or today's date
+      };
+
+      await axios.post(API_BASE_URL, newTransaction);
+
+      setTransactions([...transactions, newTransaction]);
+      setBasket([]);
+      setSellingPrice("");
+      setDate("");
     } catch (err) {
-      console.log("Error adding transactions:", err);
+      console.log("Error submitting transaction:", err);
     } finally {
       setLoading(false);
     }
@@ -82,7 +88,7 @@ const Cashflow = () => {
 
   const groupTransactionsByDate = () => {
     const grouped = {};
-    transactions.forEach(txn => {
+    transactions.forEach((txn) => {
       const txnDate = new Date(txn.date).toLocaleDateString();
       if (!grouped[txnDate]) {
         grouped[txnDate] = [];
@@ -97,37 +103,51 @@ const Cashflow = () => {
   return (
     <div className="cashflow">
       <motion.div className="transactionForm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <h2>Add Transactions</h2>
-        {newTransactions.map((txn, index) => (
-          <div key={index} className="transaction-inputs">
-            <input type="text" value={txn.itemName} onChange={(e) => handleItemChange(e, index)} placeholder="Item Name" />
-            {suggestions.index === index && suggestions.data?.length > 0 && (
-              <ul className="suggestions">
-                {suggestions.data.map((s, i) => (
-                  <li key={i} onClick={() => selectSuggestion(s, index)}>
-                    {s.itemName} (₹{s.cost})
-                  </li>
-                ))}
-              </ul>
-            )}
-            <input type="number" value={txn.cost} onChange={(e) => handleTransactionChange(e, index, "cost")} placeholder="Cost" disabled />
-            <input type="number" value={txn.sellingPrice} onChange={(e) => handleTransactionChange(e, index, "sellingPrice")} placeholder="Selling Price" />
-          </div>
-        ))}
+        <h2>Add Items to Sale</h2>
+        <input type="text" value={itemName} onChange={handleItemChange} placeholder="Item Name" />
+        {suggestions.length > 0 && (
+          <ul className="suggestions">
+            {suggestions.map((s, index) => (
+              <li key={index} onClick={() => selectSuggestion(s)}>
+                {s.itemName} (₹{s.cost})
+              </li>
+            ))}
+          </ul>
+        )}
+        <input type="number" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="Cost" />
+        <button onClick={addItemToBasket}>Add Item</button>
+
+        {basket.length > 0 && (
+          <>
+            <h3>Items in Basket:</h3>
+            <ul>
+              {basket.map((item, index) => (
+                <li key={index}>{item.itemName} - ₹{item.cost}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="Total Selling Price" />
+        <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
         
-        <button onClick={addNewTransactionField}>+ Add More Items</button>
-        <button onClick={addTransactions} disabled={loading}>
-          {loading ? "Saving..." : "Add Transaction"}
+        <button onClick={submitTransaction} disabled={loading}>
+          {loading ? "Saving..." : "Submit Sale"}
         </button>
       </motion.div>
 
       <div className="transactionHistory">
         <h2>Transaction History</h2>
-        {Object.keys(groupedTransactions).map(date => (
-          <div key={date} className="transaction-box">
+        {Object.keys(groupedTransactions).map((date, index) => (
+          <div key={index} className="transaction-box">
             <h3>{date}</h3>
-            {groupedTransactions[date].map((txn, index) => (
-              <p key={index}>{txn.itemName} - ₹{txn.cost} (Sold at ₹{txn.sellingPrice})</p>
+            {groupedTransactions[date].map((txn, idx) => (
+              <div key={idx} className="transaction-item">
+                {txn.items.map((item, i) => (
+                  <p key={i}>{item.itemName} - ₹{item.cost}</p>
+                ))}
+                <strong>Total Selling Price: ₹{txn.sellingPrice}</strong>
+              </div>
             ))}
           </div>
         ))}
