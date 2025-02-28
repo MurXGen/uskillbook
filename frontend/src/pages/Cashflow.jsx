@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import '../Cashflow.css'
 
 const API_BASE_URL = "https://uskillbook.onrender.com/api/transactions";
 
@@ -68,7 +67,7 @@ const Cashflow = () => {
 
   return (
     <div className="cashflow-wrapper">
-      <motion.div className="transactionForm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <motion.div className="transaction-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h2>Add Transaction</h2>
         <input type="text" value={itemName} onChange={handleItemChange} placeholder="Transaction Item Name" />
         {suggestions.length > 0 && (
@@ -86,7 +85,7 @@ const Cashflow = () => {
         <button onClick={addTransaction}>Add Transaction</button>
       </motion.div>
 
-      <div className="transactionHistory">
+      <div className="transaction-list">
         <h2>Transaction History</h2>
         {transactions.map((txn, index) => (
           <div key={index} className="transaction-item">
