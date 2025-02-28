@@ -40,36 +40,42 @@ const ImageUploadComponent = ({
       alert("Please upload an image.");
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     const formData = new FormData();
     formData.append("image", image);
     formData.append("price", price);
     formData.append("paymentMode", paymentMode);
     formData.append("buyType", buyType);
-
+  
+    // Debugging: Check what is being sent
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]); // Logs key-value pairs
+    }
+  
     try {
       const response = await fetch("https://uskillbook.onrender.com/api/orders", {
         method: "POST",
-        body: formData,
+        body: formData, // No need to set headers for FormData
       });
-
+  
       const data = await response.json();
-      console.log(data);
-
+      console.log("Response Data:", data);
+  
       if (response.ok) {
         window.location.href = "https://uskillbook.vercel.app/checkout";
       } else {
         alert("Order failed. Try again.");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting order:", error);
       alert("An error occurred.");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <>
