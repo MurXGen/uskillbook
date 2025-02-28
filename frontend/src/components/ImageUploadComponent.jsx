@@ -37,43 +37,57 @@ const ImageUploadComponent = ({
 
   const handleSubmit = async () => {
     if (!image) {
-      alert("Please upload an image.");
+      alert("❌ Please upload an image.");
       return;
     }
   
     setIsLoading(true);
   
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("price", price);
-    formData.append("paymentMode", paymentMode);
-    formData.append("buyType", buyType);
-  
-    // Debugging: Check what is being sent
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]); // Logs key-value pairs
-    }
-  
     try {
+      // Convert image to Base64
+      const base64Image = await convertToBase64(image);
+  
+      const orderData = {
+        image: base64Image, // Send as Base64
+        price,
+        paymentMode,
+        buyType,
+      };
+  
+      console.log("📦 Sending Order Data:", orderData);
+  
       const response = await fetch("https://uskillbook.onrender.com/api/orders", {
         method: "POST",
-        body: formData, // No need to set headers for FormData
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
       });
   
       const data = await response.json();
-      console.log("Response Data:", data);
+      console.log("📦 Response Data:", data);
   
       if (response.ok) {
         window.location.href = "https://uskillbook.vercel.app/checkout";
       } else {
-        alert("Order failed. Try again.");
+        alert("❌ Order failed. Try again.");
       }
     } catch (error) {
-      console.error("Error submitting order:", error);
-      alert("An error occurred.");
+      console.error("❌ Error submitting order:", error);
+      alert("❌ An error occurred.");
     } finally {
       setIsLoading(false);
     }
+  };
+  
+  // Convert image to Base64
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
   
 

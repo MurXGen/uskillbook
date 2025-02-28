@@ -3,26 +3,28 @@ const Order = require("../models/Order");
 // Create Order
 const createOrder = async (req, res) => {
   try {
-    const { price, paymentMode, buyType } = req.body;
+    const { image, price, paymentMode, buyType } = req.body;
 
-    if (!req.file || !req.file.path) {
-      return res.status(400).json({ error: "Image file is required" });
+    if (!image || !price || !paymentMode || !buyType) {
+      return res.status(400).json({ error: "❌ All fields (image, price, paymentMode, buyType) are required" });
     }
 
-    const imageUrl = req.file.path;
+    // Upload image to Cloudinary
+    const uploadedImage = await cloudinary.uploader.upload(image, { folder: "uskillbook_orders" });
 
-    if (!price || !paymentMode || !buyType) {
-      return res.status(400).json({ error: "All fields (price, paymentMode, buyType) are required" });
-    }
-
-    const newOrder = new Order({ imageUrl, price, paymentMode, buyType });
+    const newOrder = new Order({
+      imageUrl: uploadedImage.secure_url, // Save Cloudinary URL
+      price,
+      paymentMode,
+      buyType,
+    });
 
     await newOrder.save();
 
     res.status(201).json({ message: "✅ Order created successfully", order: newOrder });
   } catch (error) {
     console.error("❌ Order creation error:", error);
-    res.status(500).json({ error: "Failed to create order" });
+    res.status(500).json({ error: "❌ Failed to create order" });
   }
 };
 
