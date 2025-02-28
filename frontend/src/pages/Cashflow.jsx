@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import '../Cashflow.css';
@@ -14,6 +14,7 @@ const Cashflow = () => {
   const [basket, setBasket] = useState([]); // Stores items before submitting
   const [sellingPrice, setSellingPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     axios.get(API_BASE_URL)
@@ -21,24 +22,29 @@ const Cashflow = () => {
       .catch(err => console.log("Error fetching transactions:", err));
   }, []);
 
-  const fetchSuggestions = async (query) => {
+  const fetchSuggestions = useCallback(async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
       return;
     }
 
     try {
-      const res = await axios.get(`${API_BASE_URL}/search?query=${query}`);
+      const res = await axios.get(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}`);
       setSuggestions(res.data);
+      setError(null);
     } catch (err) {
-      console.log("Error fetching suggestions:", err);
+      console.error("Error fetching suggestions:", err.response?.data || err);
+      setError("Failed to fetch suggestions. Please try again.");
     }
-  };
+  }, []);
 
   const handleItemChange = (e) => {
     const value = e.target.value;
     setItemName(value);
-    fetchSuggestions(value);
+
+    // Debounce: Wait 300ms before calling API
+    clearTimeout(window.searchTimeout);
+    window.searchTimeout = setTimeout(() => fetchSuggestions(value), 300);
   };
 
   const selectSuggestion = (suggestion) => {
@@ -63,21 +69,21 @@ const Cashflow = () => {
       alert("Please add items and enter selling price.");
       return;
     }
-  
+
     setLoading(true);
-  
+
     const newTransaction = {
       items: basket,
       sellingPrice,
       date: date || new Date().toISOString(), // Use entered date or today's date
     };
-  
-    console.log("🔍 Sending transaction data:", newTransaction);  // ✅ Debug log
-  
+
+    console.log("🔍 Sending transaction data:", newTransaction); // ✅ Debug log
+
     try {
       const response = await axios.post(API_BASE_URL, newTransaction);
-      console.log("✅ Response from server:", response.data);  // ✅ Debug log
-  
+      console.log("✅ Response from server:", response.data); // ✅ Debug log
+
       setTransactions([...transactions, response.data]);
       setBasket([]);
       setSellingPrice("");
@@ -88,21 +94,18 @@ const Cashflow = () => {
       setLoading(false);
     }
   };
-  
 
   const groupTransactionsByDate = () => {
     if (!transactions || transactions.length === 0) return {}; // ✅ Prevents error
 
-    const grouped = {};
-    transactions.forEach((txn) => {
+    return transactions.reduce((grouped, txn) => {
       const txnDate = new Date(txn.date).toLocaleDateString();
       if (!grouped[txnDate]) {
         grouped[txnDate] = [];
       }
       grouped[txnDate].push(txn);
-    });
-
-    return grouped;
+      return grouped;
+    }, {});
   };
 
   const groupedTransactions = groupTransactionsByDate();
@@ -111,7 +114,13 @@ const Cashflow = () => {
     <div className="cashflow">
       <motion.div className="transactionForm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h2>Add Items to Sale</h2>
-        <input type="text" value={itemName} onChange={handleItemChange} placeholder="Item Name" />
+        <input
+          type="text"
+          value={itemName}
+          onChange={handleItemChange}
+          placeholder="Item Name"
+        />
+        {error && <p className="error">{error}</p>}
         {suggestions.length > 0 && (
           <ul className="suggestions">
             {suggestions.map((s, index) => (
@@ -121,7 +130,12 @@ const Cashflow = () => {
             ))}
           </ul>
         )}
-        <input type="number" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="Cost" />
+        <input
+          type="number"
+          value={cost}
+          onChange={(e) => setCost(e.target.value)}
+          placeholder="Cost"
+        />
         <button onClick={addItemToBasket}>Add Item</button>
 
         {basket.length > 0 && (
@@ -135,7 +149,12 @@ const Cashflow = () => {
           </>
         )}
 
-        <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="Total Selling Price" />
+        <input
+          type="number"
+          value={sellingPrice}
+          onChange={(e) => setSellingPrice(e.target.value)}
+          placeholder="Total Selling Price"
+        />
         <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
 
         <button onClick={submitTransaction} disabled={loading}>
@@ -150,7 +169,7 @@ const Cashflow = () => {
             <h3>{date}</h3>
             {(groupedTransactions[date] || []).map((txn, idx) => (
               <div key={idx} className="transaction-item">
-                {(txn.items || []).map((item, i) => (  // ✅ Prevents undefined error
+                {(txn.items || []).map((item, i) => (
                   <p key={i}>{item.itemName} - ₹{item.cost}</p>
                 ))}
                 <strong>Total Selling Price: ₹{txn.sellingPrice}</strong>
@@ -158,7 +177,6 @@ const Cashflow = () => {
             ))}
           </div>
         ))}
-
       </div>
     </div>
   );
