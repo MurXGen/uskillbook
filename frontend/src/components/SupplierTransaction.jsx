@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 
@@ -11,6 +11,7 @@ const SupplierTransaction = ({ onTransaction }) => {
     const [reason, setReason] = useState("");
     const [date, setDate] = useState(""); 
     const [loading, setLoading] = useState(false);
+    const dateInputRef = useRef(null); // Reference for hidden input
 
     useEffect(() => {
         axios.get(API_BASE_URL)
@@ -63,12 +64,15 @@ const SupplierTransaction = ({ onTransaction }) => {
 
             {/* Date Picker Section */}
             <div>
-                <label htmlFor="datetimePicker" style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
+                <label 
+                    onClick={() => dateInputRef.current && dateInputRef.current.showPicker()} 
+                    style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+                >
                     Select Date & Time (Optional)
                 </label>
                 <input
                     type="datetime-local"
-                    id="datetimePicker"
+                    ref={dateInputRef} // Reference to the input
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                     style={{ display: "none" }} // Hide the actual input
