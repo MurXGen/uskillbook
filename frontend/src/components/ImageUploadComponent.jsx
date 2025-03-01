@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "../checkout.css";
 import axios from 'axios';
+import imageCompression from "browser-image-compression";
 
 const ImageUploadComponent = ({
   image,
@@ -27,23 +28,34 @@ const ImageUploadComponent = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Ensure file size is within 5MB limit
-    if (file.size > 5 * 1024 * 1024) {
-      alert("File size must be less than 5MB.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImageUrl(reader.result);
+    // Compression Options
+    const options = {
+      maxSizeMB: 1, // Set the maximum size (1MB)
+      maxWidthOrHeight: 1024, // Resize image
+      useWebWorker: true,
     };
-    reader.readAsDataURL(file);
-    setImage(file);
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log("Original File Size:", file.size / 1024 / 1024, "MB");
+      console.log("Compressed File Size:", compressedFile.size / 1024 / 1024, "MB");
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(compressedFile);
+
+      setImage(compressedFile);
+    } catch (error) {
+      console.error("Image Compression Error:", error);
+    }
   };
+
 
   const handleUploadClick = () => {
     document.getElementById("fileInput").click();
