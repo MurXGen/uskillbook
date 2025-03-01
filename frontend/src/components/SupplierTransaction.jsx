@@ -9,7 +9,7 @@ const SupplierTransaction = ({ onTransaction }) => {
     const [selectedSupplier, setSelectedSupplier] = useState("");
     const [amount, setAmount] = useState("");
     const [reason, setReason] = useState("");
-    const [date, setDate] = useState(""); // New state for date selection
+    const [date, setDate] = useState(""); 
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -26,7 +26,6 @@ const SupplierTransaction = ({ onTransaction }) => {
 
         setLoading(true);
         
-        // Use selected date or default to the current time
         const transactionDate = date ? new Date(date).toISOString() : new Date().toISOString();
 
         axios.put(`${API_BASE_URL}/${selectedSupplier}`, { 
@@ -37,7 +36,7 @@ const SupplierTransaction = ({ onTransaction }) => {
         .then(() => {
             setAmount("");
             setReason("");
-            setDate(""); // Reset date input
+            setDate(""); 
             onTransaction();
         })
         .catch(err => console.log("Error updating balance:", err))
@@ -62,10 +61,19 @@ const SupplierTransaction = ({ onTransaction }) => {
                 <input type="text" value={reason} placeholder="Reason" onChange={e => setReason(e.target.value)} />
             </div>
 
-            {/* Date Picker */}
+            {/* Date Picker Section */}
             <div>
-                <label>Select Date & Time (Optional): </label>
-                <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
+                <label htmlFor="datetimePicker" style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
+                    Select Date & Time (Optional)
+                </label>
+                <input
+                    type="datetime-local"
+                    id="datetimePicker"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    style={{ display: "none" }} // Hide the actual input
+                />
+                {date && <p>Selected: {new Date(date).toLocaleString()}</p>} {/* Display selected date */}
             </div>
 
             <div className="transOperation">
@@ -78,7 +86,6 @@ const SupplierTransaction = ({ onTransaction }) => {
                     {loading ? <span className="loader"></span> : "-" }
                 </button>
             </div>
-
         </motion.div>
     );
 };
