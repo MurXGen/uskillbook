@@ -20,11 +20,7 @@ const ImageUploadComponent = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerHeight < 500) {
-        setIsKeyboardOpen(true);
-      } else {
-        setIsKeyboardOpen(false);
-      }
+      setIsKeyboardOpen(window.innerHeight < 500);
     };
 
     window.addEventListener("resize", handleResize);
@@ -33,14 +29,20 @@ const ImageUploadComponent = ({
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setImage(file);
+    if (!file) return;
+
+    // Ensure file size is within 5MB limit
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size must be less than 5MB.");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+    setImage(file);
   };
 
   const handleUploadClick = () => {
@@ -50,6 +52,18 @@ const ImageUploadComponent = ({
   const handleSubmit = async () => {
     if (!image) {
       alert("Please upload an image.");
+      return;
+    }
+    if (!price) {
+      alert("Please enter the price.");
+      return;
+    }
+    if (!paymentMode) {
+      alert("Please select a payment mode.");
+      return;
+    }
+    if (!buyType) {
+      alert("Please select a buy type.");
       return;
     }
 
@@ -67,17 +81,17 @@ const ImageUploadComponent = ({
         body: formData,
       });
 
-      const data = await response.json();
-      console.log(data);
-
-      if (response.ok) {
-        window.location.href = "https://uskillbook.vercel.app/checkout";
-      } else {
-        alert("Order failed. Try again.");
+      if (!response.ok) {
+        throw new Error("Order submission failed");
       }
+
+      const data = await response.json();
+      console.log("Order Success:", data);
+
+      window.location.href = "https://uskillbook.vercel.app/checkout";
     } catch (error) {
-      console.error(error);
-      alert("An error occurred.");
+      console.error("Error submitting order:", error);
+      alert("An error occurred. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -133,7 +147,7 @@ const ImageUploadComponent = ({
               className="dropdown-btn"
               onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
             >
-              {paymentMode}
+              {paymentMode || "Select Payment Mode"}
               <span className="material-symbols-outlined">
                 keyboard_arrow_down
               </span>
@@ -164,7 +178,7 @@ const ImageUploadComponent = ({
               className="dropdown-btn"
               onClick={() => setShowBuyTypeDropdown(!showBuyTypeDropdown)}
             >
-              {buyType}
+              {buyType || "Select Buy Type"}
               <span className="material-symbols-outlined">
                 keyboard_arrow_down
               </span>
