@@ -3,10 +3,10 @@ body {
 }
 
 .addSupplierButton {
-    padding: 24px 20px;
+    padding: 24px 0;
 }
 
-.addSupplierButton button{
+.addSupplierButton button {
     border-radius: 12px;
     padding: 12px;
 }
@@ -34,8 +34,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
+    padding: 12px 20px;
     transition-duration: 0.3s;
+    background-color: #007bff;
+    border-radius: 12px;
 }
 
 .supplier-box .supplierAction:hover .deleteSupplier {
@@ -47,12 +49,14 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    color: #faebd7;
+
 }
 
 .supplier-box>.supplierAction p>span {
     font-size: 24px;
     font-weight: 700;
-    color: #007bff;
+    color: #ffff;
 }
 
 .supplier-box:hover {
@@ -207,6 +211,7 @@ button {
     transform: none;
     padding: 24px;
     gap: 12px;
+    border-radius: 12px;
 }
 
 .transaction-form>div>input,
@@ -246,8 +251,8 @@ select {
 }
 
 .transaction-form div .amountInput::placeholder {
-color: #fff;
-font-weight: 600;
+    color: #fff;
+    font-weight: 600;
 }
 
 
