@@ -11,7 +11,7 @@ const Dealer = () => {
   const [showForm, setShowForm] = useState(false); // State to show/hide AddSupplier
 
   return (
-    <div>
+    <div className="addSupplierButton">
       <button className="showAddSupplier" onClick={() => setShowForm(!showForm)}>
         {showForm ? "Hide Form" : "Add Supplier"}
       </button>

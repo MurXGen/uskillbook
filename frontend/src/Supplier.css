@@ -2,9 +2,16 @@ body {
     font-family: 'poppins';
 }
 
-.showAddSupplier{
-margin: 24px 0;
+.addSupplierButton {
+    padding: 24px 20px;
 }
+
+.addSupplierButton button{
+    border-radius: 12px;
+    padding: 12px;
+}
+
+
 
 .supplier-container {
     margin: 24px 20px;
@@ -32,8 +39,8 @@ margin: 24px 0;
 }
 
 .supplier-box .supplierAction:hover .deleteSupplier {
-display: block;
-transition: 0.3s;
+    display: block;
+    transition: 0.3s;
 }
 
 .supplier-box>.supplierAction p {
@@ -54,7 +61,7 @@ transition: 0.3s;
 
 .transaction-history {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     align-items: center;
     gap: 24px;
     overflow-x: scroll;
@@ -73,13 +80,13 @@ transition: 0.3s;
     transition: background 0.3s ease;
     min-width: 150px;
     max-width: 250px;
-  }
-  
-  .transaction-item:hover {
+}
+
+.transaction-item:hover {
     background: rgb(255, 228, 196);
-  }
-  
-  .txn-reason {
+}
+
+.txn-reason {
     font-size: 12px;
     text-align: center;
     background: rgba(255, 255, 255, 0.8);
@@ -87,7 +94,7 @@ transition: 0.3s;
     padding: 6px 12px;
     margin-top: 5px;
     overflow: hidden;
-  }
+}
 
 .txn-type {
     text-align: center;
@@ -117,7 +124,7 @@ transition: 0.3s;
 
 .txn-reason::-webkit-scrollbar {
     display: none;
-  }
+}
 
 .txn-date {
     font-size: 12px;
@@ -226,39 +233,53 @@ select {
     font-size: 24px;
     font-weight: 900;
     text-align: center;
-    color: #007bff;
+    color: #ffffff;
+    width: 415%;
     border: 0;
+    background: #ffffff4d;
+}
+
+.transaction-form div .amountInput::-webkit-outer-spin-button,
+.transaction-form div .amountInput::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.transaction-form div .amountInput::placeholder {
+color: #fff;
+font-weight: 600;
 }
 
 
 .transaction-summary {
     margin: 24px 20px;
-    padding: 12px;
+    padding: 32px 12px;
     background: #ffffff33;
     border-radius: 12px;
-  }
-  
-  .transaction-list {
-    display: flex
-;
+    overflow-x: scroll;
+}
+
+.transaction-list {
+    display: flex;
     flex-direction: row;
     gap: 12px;
-  }
-  
-  .transaction-day {
+}
+
+.transaction-day {
     padding: 10px;
     border: 1px solid #ddd;
     background: #fff;
     border-radius: 5px;
     font-size: 12px;
-  }
+    min-width: 130px;
+    max-width: 130px;
+}
 
-  .transaction-day h3{
+.transaction-day h3 {
     background: #faebd7;
     padding: 12px;
     border-radius: 12px;
     border: 1px solid grey;
     font-size: 12px;
     margin-top: -32px;
-  }
-  
+}
