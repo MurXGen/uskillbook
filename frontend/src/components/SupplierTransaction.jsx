@@ -9,6 +9,7 @@ const SupplierTransaction = ({ onTransaction }) => {
     const [selectedSupplier, setSelectedSupplier] = useState("");
     const [amount, setAmount] = useState("");
     const [reason, setReason] = useState("");
+    const [date, setDate] = useState(""); // New state for date selection
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -24,14 +25,23 @@ const SupplierTransaction = ({ onTransaction }) => {
         }
 
         setLoading(true);
-        axios.put(`${API_BASE_URL}/${selectedSupplier}`, { amount: change, reason })
-            .then(() => {
-                setAmount("");
-                setReason("");
-                onTransaction();
-            })
-            .catch(err => console.log("Error updating balance:", err))
-            .finally(() => setLoading(false));
+        
+        // Use selected date or default to the current time
+        const transactionDate = date ? new Date(date).toISOString() : new Date().toISOString();
+
+        axios.put(`${API_BASE_URL}/${selectedSupplier}`, { 
+            amount: change, 
+            reason, 
+            date: transactionDate 
+        })
+        .then(() => {
+            setAmount("");
+            setReason("");
+            setDate(""); // Reset date input
+            onTransaction();
+        })
+        .catch(err => console.log("Error updating balance:", err))
+        .finally(() => setLoading(false));
     };
 
     return (
@@ -52,6 +62,11 @@ const SupplierTransaction = ({ onTransaction }) => {
                 <input type="text" value={reason} placeholder="Reason" onChange={e => setReason(e.target.value)} />
             </div>
 
+            {/* Date Picker */}
+            <div>
+                <label>Select Date & Time (Optional): </label>
+                <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
 
             <div className="transOperation">
                 <button className="plus" onClick={() => handleTransaction(Number(amount))} disabled={loading}>
@@ -60,7 +75,7 @@ const SupplierTransaction = ({ onTransaction }) => {
                 <input className="amountInput" type="number" value={amount} placeholder="Amount" onChange={e => setAmount(Number(e.target.value))} />
 
                 <button className="minus" onClick={() => handleTransaction(-Number(amount))} disabled={loading}>
-                    {loading ? <span className="loader"></span> : "-"}
+                    {loading ? <span className="loader"></span> : "-" }
                 </button>
             </div>
 

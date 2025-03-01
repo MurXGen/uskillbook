@@ -22,26 +22,26 @@ exports.addSupplier = async (req, res) => {
   }
 };
 
-// Update supplier balance (Add/Subtract with transaction log)
+// Update supplier balance (Add/Subtract with transaction log and selectable date)
 exports.updateSupplierBalance = async (req, res) => {
-    try {
-      const { amount, reason } = req.body;
-      const supplier = await Supplier.findById(req.params.id);
-  
-      if (!supplier) return res.status(404).json({ error: "Supplier not found" });
-  
-      const transactionType = amount >= 0 ? "Added" : "Subtracted";
-  
-      supplier.balance += amount;
-      supplier.transactions.push({ amount, type: transactionType, reason });
-  
-      await supplier.save();
-      res.json(supplier);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
-  
+  try {
+    const { amount, reason, date } = req.body;
+    const supplier = await Supplier.findById(req.params.id);
+
+    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+
+    const transactionType = amount >= 0 ? "Added" : "Subtracted";
+    const transactionDate = date ? new Date(date) : new Date();
+
+    supplier.balance += amount;
+    supplier.transactions.push({ amount, type: transactionType, reason, date: transactionDate });
+
+    await supplier.save();
+    res.json(supplier);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 // Delete supplier
 exports.deleteSupplier = async (req, res) => {
@@ -53,7 +53,7 @@ exports.deleteSupplier = async (req, res) => {
   }
 };
 
-
+// Get transactions grouped by date
 exports.getTransactionsByDate = async (req, res) => {
   try {
     const suppliers = await Supplier.find();
