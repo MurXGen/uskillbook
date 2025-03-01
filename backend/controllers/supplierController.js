@@ -74,7 +74,12 @@ exports.getTransactionsByDate = async (req, res) => {
       });
     });
 
-    res.json(transactionsByDate);
+    // Sort transactions by date (latest first)
+    const sortedTransactions = Object.fromEntries(
+      Object.entries(transactionsByDate).sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA))
+    );
+
+    res.json(sortedTransactions);
   } catch (err) {
     res.status(500).json({ error: "Error fetching transactions" });
   }
