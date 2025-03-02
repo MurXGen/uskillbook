@@ -11,7 +11,17 @@ body {
     padding: 12px;
 }
 
+.supplierDate label{
+    background-color: #ffff;
+    text-decoration: none;
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    color: #007bff;
+    width: 100%;
 
+}
 
 .supplier-container {
     margin: 24px 20px;

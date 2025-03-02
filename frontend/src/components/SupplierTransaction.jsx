@@ -9,7 +9,7 @@ const SupplierTransaction = ({ onTransaction }) => {
     const [selectedSupplier, setSelectedSupplier] = useState("");
     const [amount, setAmount] = useState("");
     const [reason, setReason] = useState("");
-    const [date, setDate] = useState(""); 
+    const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
     const dateInputRef = useRef(null); // Reference for hidden input
 
@@ -26,22 +26,22 @@ const SupplierTransaction = ({ onTransaction }) => {
         }
 
         setLoading(true);
-        
+
         const transactionDate = date ? new Date(date).toISOString() : new Date().toISOString();
 
-        axios.put(`${API_BASE_URL}/${selectedSupplier}`, { 
-            amount: change, 
-            reason, 
-            date: transactionDate 
+        axios.put(`${API_BASE_URL}/${selectedSupplier}`, {
+            amount: change,
+            reason,
+            date: transactionDate
         })
-        .then(() => {
-            setAmount("");
-            setReason("");
-            setDate(""); 
-            onTransaction();
-        })
-        .catch(err => console.log("Error updating balance:", err))
-        .finally(() => setLoading(false));
+            .then(() => {
+                setAmount("");
+                setReason("");
+                setDate("");
+                onTransaction();
+            })
+            .catch(err => console.log("Error updating balance:", err))
+            .finally(() => setLoading(false));
     };
 
     return (
@@ -63,10 +63,10 @@ const SupplierTransaction = ({ onTransaction }) => {
             </div>
 
             {/* Date Picker Section */}
-            <div>
-                <label 
-                    onClick={() => dateInputRef.current && dateInputRef.current.showPicker()} 
-                    style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+            <div className="supplierDate">
+                <label
+                    onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+                    style={{ cursor: "pointer"}}
                 >
                     Select Date & Time (Optional)
                 </label>
@@ -87,7 +87,7 @@ const SupplierTransaction = ({ onTransaction }) => {
                 <input className="amountInput" type="number" value={amount} placeholder="Amount" onChange={e => setAmount(Number(e.target.value))} />
 
                 <button className="minus" onClick={() => handleTransaction(-Number(amount))} disabled={loading}>
-                    {loading ? <span className="loader"></span> : "-" }
+                    {loading ? <span className="loader"></span> : "-"}
                 </button>
             </div>
         </motion.div>
