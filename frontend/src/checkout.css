@@ -1,11 +1,9 @@
 body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(75deg, #012250, #0a457d, #89c4ff);
+    background: linear-gradient(75deg, #012250, #4476a4, #001224);
     background-size: 200% 200%;
-    animation: gradientMove 10s ease infinite;
-    font-family: "poppins";
-
+    animation: gradientMove 6s ease infinite;
 }
 
 @keyframes gradientMove {

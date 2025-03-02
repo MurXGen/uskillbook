@@ -24,8 +24,11 @@ const TransactionHistory = () => {
       });
   }, []);
 
-  // Delete order
+  // Delete order with confirmation
   const deleteOrder = async (id) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this order?");
+    if (!isConfirmed) return;
+    
     try {
       await axios.delete(`https://uskillbook.onrender.com/api/orders/${id}`);
       setOrders(orders.filter((order) => order._id !== id));
@@ -76,8 +79,7 @@ const TransactionHistory = () => {
           >
             <img src={order.imageUrl} alt="Product" className="order-image" />
             <div className="order-details">
-              <p>
-                <strong>Price:</strong>{" "}
+              <p className="orderSellPrice">
                 {editOrder === order._id ? (
                   <input
                     type="number"
@@ -90,48 +92,47 @@ const TransactionHistory = () => {
                   `₹${order.price}`
                 )}
               </p>
-              <p>
-                <strong>Payment Mode:</strong>{" "}
-                {editOrder === order._id ? (
-                  <select
-                    value={updatedData.paymentMode}
-                    onChange={(e) =>
-                      setUpdatedData({
-                        ...updatedData,
-                        paymentMode: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="Online Mode">Online Mode</option>
-                    <option value="Cash">Cash</option>
-                  </select>
-                ) : (
-                  order.paymentMode
-                )}
-              </p>
-              <p>
-                <strong>Buy Type:</strong>{" "}
-                {editOrder === order._id ? (
-                  <select
-                    value={updatedData.buyType}
-                    onChange={(e) =>
-                      setUpdatedData({
-                        ...updatedData,
-                        buyType: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="Buy">Buy</option>
-                    <option value="Rent">Rent</option>
-                  </select>
-                ) : (
-                  order.buyType
-                )}
-              </p>
-              <p>
-                <strong>Date:</strong>{" "}
-                {new Date(order.createdAt).toLocaleDateString()}
-              </p>
+              <div className="otherDetails">
+                <p>
+                  {editOrder === order._id ? (
+                    <select
+                      value={updatedData.paymentMode}
+                      onChange={(e) =>
+                        setUpdatedData({
+                          ...updatedData,
+                          paymentMode: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="Online Mode">Online Mode</option>
+                      <option value="Cash">Cash</option>
+                    </select>
+                  ) : (
+                    order.paymentMode
+                  )}
+                </p>
+                <p>
+                  {editOrder === order._id ? (
+                    <select
+                      value={updatedData.buyType}
+                      onChange={(e) =>
+                        setUpdatedData({
+                          ...updatedData,
+                          buyType: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="Buy">Buy</option>
+                      <option value="Rent">Rent</option>
+                    </select>
+                  ) : (
+                    order.buyType
+                  )}
+                </p>
+                <p>
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </p>
+              </div>
             </div>
             <div className="order-actions">
               {editOrder === order._id ? (
