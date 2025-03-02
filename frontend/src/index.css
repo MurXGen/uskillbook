@@ -135,78 +135,99 @@ body {
 /* Navbar End */
 
 /* Dashboard Start  */
-.dashboard .payNow {
-  margin: 24px;
-  padding: 32px 24px;
-  border-radius: 24px;
-  background-color: #f1f7ff1c;
+
+.dashboard {
+  display: grid;
+}
+
+.dashboard a {
+  text-decoration: none;
+}
+
+.dashboard .addOrder {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 20px;
-}
-
-.dashboard .payNow .title {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.dashboard .payNow .title .desc {
-  font-size: medium;
-  color: white;
-}
-
-.dashboard .payNow .title .title {
-  font-size: x-large;
-  color: #94bfff;
-  font-weight: 900;
-}
-
-.dashboard .payNow .features {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dashboard .payNow .features .feature {
-  display: flex;
-  align-content: flex-start;
-  gap: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 24px 20px;
+  padding: 20px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
   color: #ffffff;
-  font-weight: 500;
 }
 
-.dashboard .payNow .proceed {
-  width: 50%;
-  background-color: #1D77FF;
+
+.dashboard .addOrder .illustration {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+}
+
+.dashboard .addOrder .illustration img {
+  width: 120px;
+}
+
+.dashboard .addOrder .illustration>.boxDetail {
+  position: relative;
+  top: -74px;
+  left: -110px;
+  background-color: #fff;
+  border-radius: 32px;
+  font-size: 12px;
+  padding: 7px 12px;
+  color: #007bff;
+}
+
+.dashboard .addOrder .content {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: #007bff75;
+  border-radius: 12px;
+  border: 1px solid #fff;
+}
+
+.dashboard .otherDirects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border-top: 1px dashed #fff;
+  gap: 12px;
+  margin: 24px 20px;
+}
+
+.dashboard .otherDirects .otherBox {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 24px 0px;
   padding: 12px;
   border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #F1F7FF;
-  box-shadow: 1px 1px 5px #1D77FF;
-  transition-duration: 0.3s;
-  cursor: pointer;
-  border: 1px solid white;
-}
-
-.dashboard .payNow .proceed:hover {
-  box-shadow: none;
-  transition: 0.3s;
 
 }
 
-.dashboard .payNow a {
+.dashboard .otherBox .illustration img {
+  width: 80px;
+}
+
+.dashboard .otherDirects a {
   text-decoration: none;
-  color: #F1F7FF;
-  font-weight: 500;
-  font-size: 14px;
+  color: white;
+  font-weight: 600;
 }
 
-.dashboard .payNow .proceed span {
-  font-size: 32px;
+.dashboard .otherDirects .otherBoxContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 12px;
+  background-color: #007bff75;
+  border-radius: 12px;
+  border: 1px solid #fff;
 }
 
 /* Dashboard End */
