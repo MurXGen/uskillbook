@@ -1,10 +1,20 @@
 const mongoose = require("mongoose");
 
 const TransactionSchema = new mongoose.Schema({
-  itemName: { type: String, required: true },
-  cost: { type: Number, required: true },
-  sellingPrice: { type: Number, required: true },
-  date: { type: Date, default: Date.now }
+  type: { type: String, enum: ["Book", "Misc"], required: true },
+  date: { type: String, required: true }, // Format: YYYY-MM-DD
+  books: [
+    {
+      name: String,
+      cost: Number,
+      price: Number,
+    },
+  ],
+  misc: {
+    name: String,
+    amount: Number,
+    operation: { type: String, enum: ["Add", "Subtract"] },
+  },
 });
 
 module.exports = mongoose.model("Transaction", TransactionSchema);

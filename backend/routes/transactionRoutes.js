@@ -6,55 +6,61 @@ const router = express.Router();
 // Add a new transaction
 router.post("/", async (req, res) => {
   try {
-    const { itemName, cost, sellingPrice, date } = req.body;
+    const { type, date } = req.body;
 
-    // Check if the item already exists in DB
-    let existingItem = await Transaction.findOne({ itemName });
-
-    // If item exists, use stored cost
-    if (existingItem) {
-      existingItem = existingItem.cost;
+    let transaction;
+    if (type === "Book") {
+      const { books } = req.body;
+      transaction = new Transaction({ type, date, books });
+    } else {
+      const { name, amount, operation } = req.body;
+      transaction = new Transaction({ type, date, misc: { name, amount, operation } });
     }
 
-    const newTransaction = new Transaction({
-      itemName,
-      cost: existingItem || cost, // Use existing cost if available
-      sellingPrice,
-      date
-    });
-
-    await newTransaction.save();
-    res.status(201).json(newTransaction);
+    await transaction.save();
+    res.json({ message: "Transaction added successfully", transaction });
   } catch (error) {
-    console.error("Error adding transaction:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Error adding transaction" });
   }
 });
 
-// Fetch all transactions
 router.get("/", async (req, res) => {
   try {
-    const transactions = await Transaction.find().sort({ date: -1 });
-    res.json(transactions);
+    const date = req.query.date;
+    const transactions = await Transaction.find({ date });
+
+    let totalCost = 0;
+    let totalSelling = 0;
+
+    transactions.forEach((txn) => {
+      if (txn.type === "Book") {
+        txn.books.forEach((book) => {
+          totalCost += book.cost;
+          totalSelling += book.price;
+        });
+      } else {
+        const amount = txn.misc.amount;
+        totalSelling += txn.misc.operation === "Add" ? amount : -amount;
+      }
+    });
+
+    const profit = totalSelling - totalCost;
+
+    res.json({ transactions, totals: { totalCost, totalSelling, profit } });
   } catch (error) {
-    console.error("Error fetching transactions:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Error fetching transactions" });
   }
 });
 
-// Search for existing items by name
-router.get("/search", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const { query } = req.query;
-    const items = await Transaction.find({ itemName: { $regex: query, $options: "i" } })
-      .limit(5)
-      .select("itemName cost");
-
-    res.json(items);
+    const { id } = req.params;
+    await Transaction.findByIdAndDelete(id);
+    res.json({ message: "Transaction deleted successfully" });
   } catch (error) {
-    console.error("Error searching transactions:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Error deleting transaction" });
   }
 });
+
 
 module.exports = router;
