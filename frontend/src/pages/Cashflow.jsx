@@ -4,9 +4,10 @@ import axios from "axios";
 
 const Cashflow = () => {
   const [transactionType, setTransactionType] = useState("Book Transaction");
-  const [books, setBooks] = useState([{ name: "", cost: "", price: "" }]);
+  const [books, setBooks] = useState([{ name: "", cost: "" }]); // No price field
   const [bookSuggestions, setBookSuggestions] = useState([]);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [sellingPrice, setSellingPrice] = useState(""); // Single selling price input
   const [miscTransaction, setMiscTransaction] = useState({ name: "", amount: "", operation: "Add" });
   const [transactions, setTransactions] = useState([]);
   const [totals, setTotals] = useState({ totalCost: 0, totalSelling: 0, profit: 0 });
@@ -44,13 +45,13 @@ const Cashflow = () => {
 
   const selectBook = (index, book) => {
     const newBooks = [...books];
-    newBooks[index] = { name: book.name, cost: book.cost, price: "" };
+    newBooks[index] = { name: book.name, cost: book.cost };
     setBooks(newBooks);
     setBookSuggestions([]);
   };
 
   const addAnotherBook = () => {
-    setBooks([...books, { name: "", cost: "", price: "" }]);
+    setBooks([...books, { name: "", cost: "" }]);
   };
 
   const handleMiscChange = (field, value) => {
@@ -58,19 +59,25 @@ const Cashflow = () => {
   };
 
   const handleSubmit = async () => {
-    if (transactionType === "Book Transaction" && books.length === 0) {
-      alert("Please add at least one book.");
+    if (transactionType === "Book Transaction") {
+      if (books.length === 0 || sellingPrice === "") {
+        alert("Please add at least one book and enter selling price.");
+        return;
+      }
+    } else if (!miscTransaction.name || !miscTransaction.amount) {
+      alert("Please enter all details for miscellaneous transaction.");
       return;
     }
 
     const data = transactionType === "Book Transaction"
-      ? { type: "Book", books, date }
+      ? { type: "Book", books, sellingPrice, date }
       : { type: "Misc", ...miscTransaction, date };
 
     try {
       await axios.post("https://uskillbook.onrender.com/api/transactions", data);
       fetchTransactions();
-      setBooks([{ name: "", cost: "", price: "" }]);
+      setBooks([{ name: "", cost: "" }]);
+      setSellingPrice("");
       setMiscTransaction({ name: "", amount: "", operation: "Add" });
     } catch (error) {
       console.error("Error submitting transaction:", error);
@@ -85,7 +92,6 @@ const Cashflow = () => {
       console.error("Error deleting transaction:", error);
     }
   };
-  
 
   return (
     <div className="cashflow-container">
@@ -125,15 +131,17 @@ const Cashflow = () => {
                 value={book.cost}
                 onChange={(e) => handleBookChange(index, "cost", e.target.value)}
               />
-              <input
-                type="number"
-                placeholder="Selling Price"
-                value={book.price}
-                onChange={(e) => handleBookChange(index, "price", e.target.value)}
-              />
             </div>
           ))}
           <button onClick={addAnotherBook}>➕ Add Another Book</button>
+
+          {/* Selling Price Input */}
+          <input
+            type="number"
+            placeholder="Total Selling Price"
+            value={sellingPrice}
+            onChange={(e) => setSellingPrice(e.target.value)}
+          />
         </motion.div>
       )}
 
@@ -169,24 +177,24 @@ const Cashflow = () => {
 
       {/* Transactions Display */}
       <div className="transactions">
-  <h2>📜 Transactions for {date}</h2>
-  {transactions.map((txn) => (
-    <motion.div key={txn._id} className="transaction-item" initial={{ x: -50 }} animate={{ x: 0 }}>
-      {txn.type === "Book" ? (
-        <>
-          <h3>📖 {txn.books.map((b) => `${b.name} (₹${b.price})`).join(", ")}</h3>
-          <button onClick={() => handleDelete(txn._id)}>❌ Delete</button>
-        </>
-      ) : (
-        <>
-          <h3>💵 {txn.misc.name} - ₹{txn.misc.amount} ({txn.misc.operation})</h3>
-          <button onClick={() => handleDelete(txn._id)}>❌ Delete</button>
-        </>
-      )}
-    </motion.div>
-  ))}
-</div>
-
+        <h2>📜 Transactions for {date}</h2>
+        {transactions.map((txn) => (
+          <motion.div key={txn._id} className="transaction-item" initial={{ x: -50 }} animate={{ x: 0 }}>
+            {txn.type === "Book" ? (
+              <>
+                <h3>📖 Books: {txn.books.map((b) => `${b.name} (₹${b.cost})`).join(", ")}</h3>
+                <p>💵 Selling Price: ₹{txn.sellingPrice}</p>
+                <button onClick={() => handleDelete(txn._id)}>❌ Delete</button>
+              </>
+            ) : (
+              <>
+                <h3>💵 {txn.misc.name} - ₹{txn.misc.amount} ({txn.misc.operation})</h3>
+                <button onClick={() => handleDelete(txn._id)}>❌ Delete</button>
+              </>
+            )}
+          </motion.div>
+        ))}
+      </div>
 
       {/* Profit Calculation */}
       <div className="profit-section">
