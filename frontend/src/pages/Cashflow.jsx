@@ -17,14 +17,25 @@ const Cashflow = () => {
   }, [date]);
 
   const fetchBookSuggestions = async (query) => {
-    if (query.length < 2) return;
+    if (query.length < 2) {
+      setBookSuggestions([]); // Clear suggestions if query is too short
+      return;
+    }
+
     try {
       const res = await axios.get(`https://uskillbook.onrender.com/api/books?query=${query}`);
-      setBookSuggestions(res.data);
+
+      if (res.data && Array.isArray(res.data)) {
+        setBookSuggestions(res.data); // Ensure it's an array before setting
+      } else {
+        setBookSuggestions([]); // Clear if response is not as expected
+      }
     } catch (error) {
       console.error("Error fetching books:", error);
+      setBookSuggestions([]); // Clear suggestions on error
     }
   };
+
 
   const fetchTransactions = async () => {
     try {
@@ -40,8 +51,12 @@ const Cashflow = () => {
     const newBooks = [...books];
     newBooks[index][field] = value;
     setBooks(newBooks);
-    if (field === "name") fetchBookSuggestions(value);
+
+    if (field === "name") {
+      fetchBookSuggestions(value);
+    }
   };
+
 
   const selectBook = (index, book) => {
     const newBooks = [...books];
@@ -118,13 +133,14 @@ const Cashflow = () => {
               />
               {bookSuggestions.length > 0 && (
                 <div className="suggestions">
-                  {bookSuggestions.map((b) => (
-                    <div key={b.id} onClick={() => selectBook(index, b)}>
+                  {bookSuggestions.map((b, i) => (
+                    <div key={i} onClick={() => selectBook(index, b)} className="suggestion-item">
                       {b.name} - ₹{b.cost}
                     </div>
                   ))}
                 </div>
               )}
+
               <input
                 type="number"
                 placeholder="Cost"
