@@ -28,7 +28,7 @@ const TransactionHistory = () => {
   const deleteOrder = async (id) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this order?");
     if (!isConfirmed) return;
-    
+
     try {
       await axios.delete(`https://uskillbook.onrender.com/api/orders/${id}`);
       setOrders(orders.filter((order) => order._id !== id));
@@ -129,9 +129,17 @@ const TransactionHistory = () => {
                     order.buyType
                   )}
                 </p>
-                <p>
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </p>
+                <p>{new Date(order.createdAt).toLocaleString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true
+                })}</p>
+
+
               </div>
             </div>
             <div className="order-actions">
