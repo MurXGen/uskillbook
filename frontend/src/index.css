@@ -2,14 +2,13 @@
 
 body {
   margin: 0;
-  height: 100vh;
-  overflow: hidden; /* Prevents background shift */
+  min-height: 100vh; /* Ensures full screen height */
   background: linear-gradient(75deg, #012250, #4476a4, #001224);
   background-size: 200% 200%;
+  background-attachment: fixed; /* FIXED BACKGROUND */
   animation: gradientMove 6s ease infinite;
-  position: fixed; /* Keeps background in place */
-  width: 100vw;
 }
+
 
 
 /* Navbar Start */
