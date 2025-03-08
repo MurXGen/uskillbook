@@ -71,7 +71,7 @@ function Dashboard() {
           </div>
         </Link>
 
-        <Link to='/need-orders'>
+        <Link to='/needs-orders'>
           <div className="otherBox">
             <div className="illustration">
               <img src={ReqBook} alt="" />
