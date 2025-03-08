@@ -1,74 +1,47 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./cashflow.css"; // Add your styles
 
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [orderId, setOrderId] = useState("");
 
-  useEffect(() => {
-    generateOrderId(); // Generate order ID on component mount
-  }, []);
+  // Handle change for input fields
+  const handleChange = (index, field, value) => {
+    const newItems = [...items];
+    newItems[index][field] = value;
+    setItems(newItems);
 
-  const generateOrderId = () => {
-    const id = "ORD-" + Math.floor(100000 + Math.random() * 900000);
-    setOrderId(id);
-  };
-
-  const handleItemChange = async (index, value) => {
-    let updatedItems = [...items];
-    updatedItems[index].name = value;
-    setItems(updatedItems);
-
-    if (value.length > 1) {
-      try {
-        const res = await axios.get(
-          `https://uskillbook.onrender.com/api/books/search?query=${value}`
-        );
-        setSuggestions(res.data);
-      } catch (error) {
-        console.error("Error fetching book suggestions:", error);
-      }
-    } else {
-      setSuggestions([]);
+    // Fetch suggestions for book names
+    if (field === "name" && value.length > 1) {
+      axios
+        .get(`http://localhost:5000/api/books/search?query=${value}`)
+        .then((res) => setSuggestions(res.data))
+        .catch((err) => console.error(err));
     }
   };
 
-  const selectSuggestion = async (index, book) => {
-    let updatedItems = [...items];
-    updatedItems[index] = { name: book.name, cost: book.cost };
-    setItems(updatedItems);
-    setSuggestions([]);
-  };
-
-  const handleAddItem = () => {
+  // Add another book input
+  const addItem = () => {
     setItems([...items, { name: "", cost: "" }]);
   };
 
-  const handleCostChange = (index, value) => {
-    let updatedItems = [...items];
-    updatedItems[index].cost = value;
-    setItems(updatedItems);
-  };
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const orderData = {
-      orderId,
-      date: new Date().toISOString(),
       items,
       sellingPrice,
     };
 
     try {
-      await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
-      alert("Order submitted successfully!");
+      const res = await axios.post("http://localhost:5000/api/cashflow", orderData);
+      alert("Transaction Added Successfully");
       setItems([{ name: "", cost: "" }]);
       setSellingPrice("");
-      generateOrderId();
     } catch (error) {
-      console.error("Error submitting order:", error);
+      console.error("Error adding transaction:", error);
     }
   };
 
@@ -76,41 +49,37 @@ const Cashflow = () => {
     <div className="cashflow-container">
       <h2>Cashflow Entry</h2>
       <form onSubmit={handleSubmit}>
-        <p>Order ID: {orderId}</p>
-
         {items.map((item, index) => (
           <div key={index} className="item-row">
             <input
               type="text"
-              placeholder="Enter item name"
+              placeholder="Item Name"
               value={item.name}
-              onChange={(e) => handleItemChange(index, e.target.value)}
+              onChange={(e) => handleChange(index, "name", e.target.value)}
+              list={`suggestions-${index}`}
             />
-            {suggestions.length > 0 && (
-              <ul className="suggestions-list">
-                {suggestions.map((book) => (
-                  <li key={book._id} onClick={() => selectSuggestion(index, book)}>
-                    {book.name} - ₹{book.cost}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <datalist id={`suggestions-${index}`}>
+              {suggestions.map((book, i) => (
+                <option key={i} value={book.name} />
+              ))}
+            </datalist>
+
             <input
               type="number"
-              placeholder="Enter cost"
+              placeholder="Cost"
               value={item.cost}
-              onChange={(e) => handleCostChange(index, e.target.value)}
+              onChange={(e) => handleChange(index, "cost", e.target.value)}
             />
           </div>
         ))}
 
-        <button type="button" onClick={handleAddItem}>
+        <button type="button" onClick={addItem}>
           Add Another Item
         </button>
 
         <input
           type="number"
-          placeholder="Enter selling price"
+          placeholder="Selling Price"
           value={sellingPrice}
           onChange={(e) => setSellingPrice(e.target.value)}
         />
