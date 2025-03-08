@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import "./cashflow.css"; // Add your styles
+import "./cashflow.css"; // Ensure styles are included
 
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  // Handle change for input fields
-  const handleChange = (index, field, value) => {
+  // Handle change in input fields
+  const handleChange = async (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
 
-    // Fetch suggestions for book names
+    // Fetch book name suggestions
     if (field === "name" && value.length > 1) {
-      axios
-        .get(`http://localhost:5000/api/books/search?query=${value}`)
-        .then((res) => setSuggestions(res.data))
-        .catch((err) => console.error(err));
+      try {
+        const res = await axios.get(
+          `https://uskillbook.onrender.com/api/books/search?query=${value}`
+        );
+        setSuggestions(res.data);
+      } catch (err) {
+        console.error("Error fetching suggestions:", err);
+      }
     }
   };
 
-  // Add another book input
+  // Add another book input field
   const addItem = () => {
     setItems([...items, { name: "", cost: "" }]);
   };
@@ -36,7 +40,7 @@ const Cashflow = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:5000/api/cashflow", orderData);
+      await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
       setItems([{ name: "", cost: "" }]);
       setSellingPrice("");

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const orderRoutes = require("./routes/orderRoutes");
 const supplierRoutes = require("./routes/supplierRoutes");
 const queryRoutes = require("./routes/queryRoutes");
+const bookRoutes = require("./routes/bookRoutes");
 const cashflowRoutes = require("./routes/cashflowRoutes");
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/suppliers", require("./routes/supplierRoutes"));
 app.use("/api/orders", orderRoutes);
 app.use("/api/queries", queryRoutes);
+app.use("/api/books", bookRoutes);
 app.use("/api/cashflow", cashflowRoutes);
 
 

@@ -1,48 +1,54 @@
 const express = require("express");
-const router = express.Router();
-const Cashflow = require("../models/Cashflow");
-const Book = require("../models/Book");
+const Cashflow = require("../models/cashflow");
+const Book = require("../models/book");
 
-// Generate 6-digit order ID from date-time
+const router = express.Router();
+
+// Function to generate 6-digit order ID using date and time
 const generateOrderId = () => {
   const now = new Date();
-  const orderId = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
-  return orderId.slice(-6); // Take last 6 digits
+  return `${now.getFullYear()}${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}${now
+    .getHours()
+    .toString()
+    .padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}`
+    .slice(-6);
 };
 
-// Submit Cashflow Transaction
+// Add cashflow transaction
 router.post("/", async (req, res) => {
   try {
     const { items, sellingPrice } = req.body;
-    const orderId = generateOrderId(); // Generate 6-digit ID
+    const orderId = generateOrderId();
+    const date = new Date().toLocaleString();
 
-    // Save transaction in Cashflow model
-    const cashflowEntry = new Cashflow({ orderId, items, sellingPrice });
-    await cashflowEntry.save();
+    // Store cashflow details
+    const newTransaction = new Cashflow({
+      orderId,
+      date,
+      items,
+      sellingPrice,
+    });
 
-    // Check and add books to Book model if they don't exist
-    for (let item of items) {
+    await newTransaction.save();
+
+    // Check if books exist; if not, add them to the book model
+    for (const item of items) {
       const existingBook = await Book.findOne({ name: item.name });
+
       if (!existingBook) {
-        const newBook = new Book({ name: item.name, cost: item.cost });
+        const newBook = new Book({
+          name: item.name,
+          cost: item.cost,
+        });
         await newBook.save();
       }
     }
 
-    res.status(201).json({ message: "Cashflow transaction added", orderId, cashflowEntry });
+    res.status(201).json({ message: "Transaction recorded successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Error processing cashflow entry" });
-  }
-});
-
-// Search books by name for suggestions
-router.get("/search", async (req, res) => {
-  try {
-    const query = req.query.query;
-    const books = await Book.find({ name: new RegExp(query, "i") }).limit(5);
-    res.json(books);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching book suggestions" });
+    res.status(500).json({ message: "Error recording transaction", error });
   }
 });
 
