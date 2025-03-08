@@ -1,13 +1,4 @@
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden; /* Prevents background shift */
-    background: linear-gradient(75deg, #012250, #4476a4, #001224);
-    background-size: 200% 200%;
-    animation: gradientMove 6s ease infinite;
-    position: fixed; /* Keeps background in place */
-    width: 100vw;
-}
+
 
 @keyframes gradientMove {
     0% {
