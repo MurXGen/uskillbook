@@ -1,6 +1,6 @@
 const express = require("express");
-const Cashflow = require("../models/cashflow");
-const Book = require("../models/book");
+const Cashflow = require("../models/Cashflow");
+const Book = require("../models/Book");
 
 const router = express.Router();
 

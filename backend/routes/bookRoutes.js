@@ -2,17 +2,21 @@ const express = require("express");
 const router = express.Router();
 const Book = require("../models/Book");
 
-// Search books by name
-router.get("/books/search", async (req, res) => {
+// Route to search books by name
+router.get("/search", async (req, res) => {
   try {
     const query = req.query.query;
-    if (!query) return res.status(400).json({ error: "Query is required" });
+    if (!query) {
+      return res.status(400).json({ message: "Query parameter is required" });
+    }
 
-    const books = await Book.find({ name: new RegExp(query, "i") }).limit(5);
+    // Use a case-insensitive regex search to match book names
+    const books = await Book.find({ name: { $regex: query, $options: "i" } });
+
     res.json(books);
   } catch (error) {
-    console.error("Error fetching book data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error searching books:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

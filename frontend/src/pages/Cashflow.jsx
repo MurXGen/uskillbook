@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "./cashflow.css"; // Ensure styles are included
+const React = require("react");
+const { useState } = require("react");
+const axios = require("axios");
+require("./cashflow.css"); // Ensure styles are included
 
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
@@ -94,4 +95,4 @@ const Cashflow = () => {
   );
 };
 
-export default Cashflow;
+module.exports = Cashflow;
