@@ -21,13 +21,13 @@ const Cashflow = () => {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          setSuggestions(res.data); // Update global suggestions
+          setSuggestions(res.data);
         } catch (err) {
           console.error("Error fetching suggestions:", err);
           setSuggestions([]);
         }
       } else {
-        setSuggestions([]); // Clear suggestions if input is too short
+        setSuggestions([]); // Clear if input is too short
       }
     }
   };
@@ -38,14 +38,14 @@ const Cashflow = () => {
     newItems[index].name = name;
     setItems(newItems);
     setSuggestions([]); // Clear suggestions
-    setActiveIndex(null); // Hide suggestions
+    setActiveIndex(null); // Hide dropdown
   };
 
   // Add new item field
   const addItem = () => {
     setItems([...items, { name: "", cost: "" }]);
     setActiveIndex(null);
-    setSuggestions([]); // Reset suggestions on new input
+    setSuggestions([]);
   };
 
   // Handle form submission
@@ -73,17 +73,22 @@ const Cashflow = () => {
           <div key={index} className="item-row">
             <input
               type="text"
-              placeholder="Item Name"
+              placeholder="Enter item name"
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
               onFocus={() => setActiveIndex(index)}
-              onBlur={() => setTimeout(() => setActiveIndex(null), 200)}
+              onBlur={() => {
+                if (activeIndex === index) setActiveIndex(null);
+              }}
             />
             {activeIndex === index && suggestions.length > 0 && (
-              <ul className="suggestions-list">
+              <ul
+                className="suggestions-list"
+                onMouseDown={(e) => e.preventDefault()} // Prevent closing on click
+              >
                 {suggestions.map((book, i) => (
                   <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
-                    {book.name}
+                    {book.name} - ₹{book.price}
                   </li>
                 ))}
               </ul>
@@ -91,7 +96,7 @@ const Cashflow = () => {
 
             <input
               type="number"
-              placeholder="Cost"
+              placeholder="Enter cost"
               value={item.cost}
               onChange={(e) => handleChange(index, "cost", e.target.value)}
             />
@@ -104,7 +109,7 @@ const Cashflow = () => {
 
         <input
           type="number"
-          placeholder="Selling Price"
+          placeholder="Enter selling price"
           value={sellingPrice}
           onChange={(e) => setSellingPrice(e.target.value)}
         />
