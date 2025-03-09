@@ -5,7 +5,7 @@ import "./cashflow.css";
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "", suggestions: [] }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [activeIndex, setActiveIndex] = useState(null); // Tracks active input field
+  const [activeIndex, setActiveIndex] = useState(null); // Tracks which input is active
 
   // Handle input change
   const handleChange = async (index, field, value) => {
@@ -14,19 +14,19 @@ const Cashflow = () => {
     setItems(newItems);
 
     if (field === "name") {
-      setActiveIndex(index); // Set active input
+      setActiveIndex(index); // Show suggestions only for this input
       if (value.length > 1) {
         try {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          newItems[index].suggestions = res.data; // Store suggestions only for this input
+          newItems[index].suggestions = res.data; // Store suggestions for this input only
         } catch (err) {
           console.error("Error fetching suggestions:", err);
           newItems[index].suggestions = [];
         }
       } else {
-        newItems[index].suggestions = []; // Clear if input is too short
+        newItems[index].suggestions = []; // Clear suggestions if input is too short
       }
       setItems(newItems);
     }
@@ -36,7 +36,7 @@ const Cashflow = () => {
   const handleSuggestionClick = (index, name) => {
     const newItems = [...items];
     newItems[index].name = name;
-    newItems[index].suggestions = []; // Clear suggestions for this input only
+    newItems[index].suggestions = []; // Clear suggestions for this input
     setItems(newItems);
     setActiveIndex(null);
   };
@@ -74,16 +74,13 @@ const Cashflow = () => {
               placeholder="Enter item name"
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
-              onFocus={() => setActiveIndex(index)}
-              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Delay to allow clicking suggestion
+              onFocus={() => setActiveIndex(index)} // Set active index when focused
+              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Delay for clicking
             />
             {activeIndex === index && item.suggestions.length > 0 && (
-              <ul
-                className="suggestions-list"
-                onMouseDown={(e) => e.preventDefault()} // Prevent closing on click
-              >
+              <ul className="suggestions-list">
                 {item.suggestions.map((book, i) => (
-                  <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
+                  <li key={i} onMouseDown={() => handleSuggestionClick(index, book.name)}>
                     {book.name} - ₹{book.price}
                   </li>
                 ))}
