@@ -1,63 +1,57 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./cashflow.css"; // Ensure styles are included
 
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [suggestions, setSuggestions] = useState([]); // Global suggestion state
-  const [activeIndex, setActiveIndex] = useState(null); // Tracks active input field
+  const [suggestions, setSuggestions] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(null); // Track active input field
 
-  // Handle input change
+  // Handle change in input fields
   const handleChange = async (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
 
     if (field === "name") {
-      setActiveIndex(index); // Set active input
+      setActiveIndex(index); // Set active input index
       if (value.length > 1) {
         try {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          setSuggestions(res.data); // Update global suggestions
+          setSuggestions(res.data);
         } catch (err) {
           console.error("Error fetching suggestions:", err);
-          setSuggestions([]);
         }
       } else {
-        setSuggestions([]); // Clear suggestions if input is too short
+        setSuggestions([]); // Clear suggestions if input is empty
       }
     }
   };
 
-  // Handle selecting a suggestion
-  const handleSuggestionClick = (index, name) => {
-    const newItems = [...items];
-    newItems[index].name = name;
-    setItems(newItems);
-    setSuggestions([]); // Clear suggestions
-    setActiveIndex(null); // Hide suggestions
-  };
-
-  // Add new item field
+  // Add another book input field
   const addItem = () => {
     setItems([...items, { name: "", cost: "" }]);
+    setSuggestions([]); // Clear suggestions when adding a new item
     setActiveIndex(null);
-    setSuggestions([]); // Reset suggestions on new input
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const orderData = { items, sellingPrice };
+    const orderData = {
+      items,
+      sellingPrice,
+    };
 
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
       setItems([{ name: "", cost: "" }]);
       setSellingPrice("");
-      setSuggestions([]);
+      setSuggestions([]); // Clear suggestions after submitting
       setActiveIndex(null);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -75,13 +69,20 @@ const Cashflow = () => {
               placeholder="Item Name"
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
-              onFocus={() => setActiveIndex(index)}
-              onBlur={() => setTimeout(() => setActiveIndex(null), 200)}
+              onFocus={() => setActiveIndex(index)} // Track which input is active
+              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Hide suggestions after clicking away
             />
             {activeIndex === index && suggestions.length > 0 && (
               <ul className="suggestions-list">
                 {suggestions.map((book, i) => (
-                  <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
+                  <li
+                    key={i}
+                    onClick={() => {
+                      handleChange(index, "name", book.name);
+                      setActiveIndex(null);
+                      setSuggestions([]); // Hide suggestions after selection
+                    }}
+                  >
                     {book.name}
                   </li>
                 ))}
