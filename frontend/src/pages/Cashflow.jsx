@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./cashflow.css"; // Ensure styles are included
+import "./cashflow.css";
 
 const Cashflow = () => {
-  const [items, setItems] = useState([{ name: "", cost: "" }]);
+  const [items, setItems] = useState([{ name: "", cost: "", suggestions: [] }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [suggestions, setSuggestions] = useState([]); // Suggestions for the active input
-  const [activeIndex, setActiveIndex] = useState(null); // Track which input is active
+  const [activeIndex, setActiveIndex] = useState(null);
 
   // Handle change in input fields
   const handleChange = async (index, field, value) => {
@@ -15,37 +14,39 @@ const Cashflow = () => {
     setItems(newItems);
 
     if (field === "name") {
-      setActiveIndex(index); // Set active input index
+      setActiveIndex(index);
       if (value.length > 1) {
         try {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          setSuggestions(res.data); // Only store suggestions for the active input
+          newItems[index].suggestions = res.data; // Store suggestions for this input only
+          setItems(newItems);
         } catch (err) {
           console.error("Error fetching suggestions:", err);
-          setSuggestions([]);
+          newItems[index].suggestions = [];
+          setItems(newItems);
         }
       } else {
-        setSuggestions([]); // Clear suggestions if input is empty
+        newItems[index].suggestions = [];
+        setItems(newItems);
       }
     }
   };
 
-  // Add another book input field
-  const addItem = () => {
-    setItems([...items, { name: "", cost: "" }]);
-    setSuggestions([]); // Clear suggestions when adding a new item
+  // Handle selecting a suggestion
+  const handleSuggestionClick = (index, name) => {
+    const newItems = [...items];
+    newItems[index].name = name;
+    newItems[index].suggestions = []; // Clear suggestions
+    setItems(newItems);
     setActiveIndex(null);
   };
 
-  // Handle selecting a suggestion
-  const handleSuggestionClick = (name) => {
-    const newItems = [...items];
-    newItems[activeIndex].name = name;
-    setItems(newItems);
-    setActiveIndex(null); // Close suggestions for this input
-    setSuggestions([]); // Clear suggestions
+  // Add another book input field
+  const addItem = () => {
+    setItems([...items, { name: "", cost: "", suggestions: [] }]);
+    setActiveIndex(null);
   };
 
   // Handle form submission
@@ -56,9 +57,8 @@ const Cashflow = () => {
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
-      setItems([{ name: "", cost: "" }]);
+      setItems([{ name: "", cost: "", suggestions: [] }]);
       setSellingPrice("");
-      setSuggestions([]); // Clear suggestions after submitting
       setActiveIndex(null);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -76,13 +76,13 @@ const Cashflow = () => {
               placeholder="Item Name"
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
-              onFocus={() => setActiveIndex(index)} // Only show suggestions for this input
-              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Hide suggestions when clicking away
+              onFocus={() => setActiveIndex(index)}
+              onBlur={() => setTimeout(() => setActiveIndex(null), 200)}
             />
-            {activeIndex === index && suggestions.length > 0 && (
+            {activeIndex === index && item.suggestions.length > 0 && (
               <ul className="suggestions-list">
-                {suggestions.map((book, i) => (
-                  <li key={i} onClick={() => handleSuggestionClick(book.name)}>
+                {item.suggestions.map((book, i) => (
+                  <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
                     {book.name}
                   </li>
                 ))}
