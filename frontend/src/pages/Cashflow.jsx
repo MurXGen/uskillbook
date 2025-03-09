@@ -3,33 +3,31 @@ import axios from "axios";
 import "./cashflow.css";
 
 const Cashflow = () => {
-  const [items, setItems] = useState([{ name: "", cost: "", suggestions: [] }]);
+  const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [suggestions, setSuggestions] = useState([]); // Global suggestion state
+  const [activeIndex, setActiveIndex] = useState(null); // Tracks active input field
 
-  // Handle change in input fields
+  // Handle input change
   const handleChange = async (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
 
     if (field === "name") {
-      setActiveIndex(index);
+      setActiveIndex(index); // Set active input
       if (value.length > 1) {
         try {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          newItems[index].suggestions = res.data; // Store suggestions for this input only
-          setItems(newItems);
+          setSuggestions(res.data); // Update global suggestions
         } catch (err) {
           console.error("Error fetching suggestions:", err);
-          newItems[index].suggestions = [];
-          setItems(newItems);
+          setSuggestions([]);
         }
       } else {
-        newItems[index].suggestions = [];
-        setItems(newItems);
+        setSuggestions([]); // Clear suggestions if input is too short
       }
     }
   };
@@ -38,15 +36,16 @@ const Cashflow = () => {
   const handleSuggestionClick = (index, name) => {
     const newItems = [...items];
     newItems[index].name = name;
-    newItems[index].suggestions = []; // Clear suggestions
     setItems(newItems);
-    setActiveIndex(null);
+    setSuggestions([]); // Clear suggestions
+    setActiveIndex(null); // Hide suggestions
   };
 
-  // Add another book input field
+  // Add new item field
   const addItem = () => {
-    setItems([...items, { name: "", cost: "", suggestions: [] }]);
+    setItems([...items, { name: "", cost: "" }]);
     setActiveIndex(null);
+    setSuggestions([]); // Reset suggestions on new input
   };
 
   // Handle form submission
@@ -57,8 +56,9 @@ const Cashflow = () => {
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
-      setItems([{ name: "", cost: "", suggestions: [] }]);
+      setItems([{ name: "", cost: "" }]);
       setSellingPrice("");
+      setSuggestions([]);
       setActiveIndex(null);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -79,9 +79,9 @@ const Cashflow = () => {
               onFocus={() => setActiveIndex(index)}
               onBlur={() => setTimeout(() => setActiveIndex(null), 200)}
             />
-            {activeIndex === index && item.suggestions.length > 0 && (
+            {activeIndex === index && suggestions.length > 0 && (
               <ul className="suggestions-list">
-                {item.suggestions.map((book, i) => (
+                {suggestions.map((book, i) => (
                   <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
                     {book.name}
                   </li>
