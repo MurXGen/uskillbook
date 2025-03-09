@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Cashflow = () => {
-  const [items, setItems] = useState([{ name: "", cost: "", suggestions: [] }]);
+  const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [activeIndex, setActiveIndex] = useState(null); // Tracks which input is active
+  const [suggestions, setSuggestions] = useState([]); // Global suggestion state
+  const [activeIndex, setActiveIndex] = useState(null); // Tracks active input field
 
   // Handle input change
   const handleChange = async (index, field, value) => {
@@ -13,21 +14,20 @@ const Cashflow = () => {
     setItems(newItems);
 
     if (field === "name") {
-      setActiveIndex(index); // Show suggestions only for this input
+      setActiveIndex(index); // Set active input
       if (value.length > 1) {
         try {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          newItems[index].suggestions = res.data; // Store suggestions for this input only
+          setSuggestions(res.data); // Update global suggestions
         } catch (err) {
           console.error("Error fetching suggestions:", err);
-          newItems[index].suggestions = [];
+          setSuggestions([]);
         }
       } else {
-        newItems[index].suggestions = []; // Clear suggestions if input is too short
+        setSuggestions([]); // Clear suggestions if input is too short
       }
-      setItems(newItems);
     }
   };
 
@@ -35,15 +35,16 @@ const Cashflow = () => {
   const handleSuggestionClick = (index, name) => {
     const newItems = [...items];
     newItems[index].name = name;
-    newItems[index].suggestions = []; // Clear suggestions for this input
     setItems(newItems);
-    setActiveIndex(null);
+    setSuggestions([]); // Clear suggestions
+    setActiveIndex(null); // Hide suggestions
   };
 
   // Add new item field
   const addItem = () => {
-    setItems([...items, { name: "", cost: "", suggestions: [] }]);
+    setItems([...items, { name: "", cost: "" }]);
     setActiveIndex(null);
+    setSuggestions([]); // Reset suggestions on new input
   };
 
   // Handle form submission
@@ -54,8 +55,9 @@ const Cashflow = () => {
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
-      setItems([{ name: "", cost: "", suggestions: [] }]);
+      setItems([{ name: "", cost: "" }]);
       setSellingPrice("");
+      setSuggestions([]);
       setActiveIndex(null);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -70,17 +72,17 @@ const Cashflow = () => {
           <div key={index} className="item-row">
             <input
               type="text"
-              placeholder="Enter item name"
+              placeholder="Item Name"
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
-              onFocus={() => setActiveIndex(index)} // Set active index when focused
-              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Delay for clicking
+              onFocus={() => setActiveIndex(index)}
+              onBlur={() => setTimeout(() => setActiveIndex(null), 200)}
             />
-            {activeIndex === index && item.suggestions.length > 0 && (
+            {activeIndex === index && suggestions.length > 0 && (
               <ul className="suggestions-list">
-                {item.suggestions.map((book, i) => (
-                  <li key={i} onMouseDown={() => handleSuggestionClick(index, book.name)}>
-                    {book.name} - ₹{book.price}
+                {suggestions.map((book, i) => (
+                  <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
+                    {book.name}
                   </li>
                 ))}
               </ul>
@@ -88,7 +90,7 @@ const Cashflow = () => {
 
             <input
               type="number"
-              placeholder="Enter cost"
+              placeholder="Cost"
               value={item.cost}
               onChange={(e) => handleChange(index, "cost", e.target.value)}
             />
@@ -101,7 +103,7 @@ const Cashflow = () => {
 
         <input
           type="number"
-          placeholder="Enter selling price"
+          placeholder="Selling Price"
           value={sellingPrice}
           onChange={(e) => setSellingPrice(e.target.value)}
         />
