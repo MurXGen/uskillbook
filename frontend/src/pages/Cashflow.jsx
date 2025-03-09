@@ -24,6 +24,7 @@ const Cashflow = () => {
           setSuggestions(res.data); // Only store suggestions for the active input
         } catch (err) {
           console.error("Error fetching suggestions:", err);
+          setSuggestions([]);
         }
       } else {
         setSuggestions([]); // Clear suggestions if input is empty
@@ -39,9 +40,9 @@ const Cashflow = () => {
   };
 
   // Handle selecting a suggestion
-  const handleSuggestionClick = (index, name) => {
+  const handleSuggestionClick = (name) => {
     const newItems = [...items];
-    newItems[index].name = name;
+    newItems[activeIndex].name = name;
     setItems(newItems);
     setActiveIndex(null); // Close suggestions for this input
     setSuggestions([]); // Clear suggestions
@@ -50,10 +51,7 @@ const Cashflow = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const orderData = {
-      items,
-      sellingPrice,
-    };
+    const orderData = { items, sellingPrice };
 
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
@@ -84,7 +82,7 @@ const Cashflow = () => {
             {activeIndex === index && suggestions.length > 0 && (
               <ul className="suggestions-list">
                 {suggestions.map((book, i) => (
-                  <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
+                  <li key={i} onClick={() => handleSuggestionClick(book.name)}>
                     {book.name}
                   </li>
                 ))}
