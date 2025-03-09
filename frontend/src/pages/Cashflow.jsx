@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
   const [sellingPrice, setSellingPrice] = useState("");
@@ -28,6 +29,15 @@ const Cashflow = () => {
         setSuggestions([]); // Clear suggestions if input is empty
       }
     }
+  };
+
+  // Handle selecting a suggestion
+  const handleSelectSuggestion = (index, book) => {
+    const newItems = [...items];
+    newItems[index] = { name: book.name, cost: book.cost || "" }; // Update name and cost
+    setItems(newItems);
+    setActiveIndex(null);
+    setSuggestions([]); // Hide suggestions
   };
 
   // Add another book input field
@@ -76,13 +86,9 @@ const Cashflow = () => {
                 {suggestions.map((book, i) => (
                   <li
                     key={i}
-                    onClick={() => {
-                      handleChange(index, "name", book.name);
-                      setActiveIndex(null);
-                      setSuggestions([]); // Hide suggestions after selection
-                    }}
+                    onClick={() => handleSelectSuggestion(index, book)}
                   >
-                    {book.name}
+                    {book.name} - ₹{book.cost}
                   </li>
                 ))}
               </ul>
