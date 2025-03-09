@@ -3,9 +3,8 @@ import axios from "axios";
 import "./cashflow.css";
 
 const Cashflow = () => {
-  const [items, setItems] = useState([{ name: "", cost: "" }]);
+  const [items, setItems] = useState([{ name: "", cost: "", suggestions: [] }]);
   const [sellingPrice, setSellingPrice] = useState("");
-  const [suggestions, setSuggestions] = useState([]); // Global suggestion state
   const [activeIndex, setActiveIndex] = useState(null); // Tracks active input field
 
   // Handle input change
@@ -21,14 +20,15 @@ const Cashflow = () => {
           const res = await axios.get(
             `https://uskillbook.onrender.com/api/books/search?query=${value}`
           );
-          setSuggestions(res.data);
+          newItems[index].suggestions = res.data; // Store suggestions only for this input
         } catch (err) {
           console.error("Error fetching suggestions:", err);
-          setSuggestions([]);
+          newItems[index].suggestions = [];
         }
       } else {
-        setSuggestions([]); // Clear if input is too short
+        newItems[index].suggestions = []; // Clear if input is too short
       }
+      setItems(newItems);
     }
   };
 
@@ -36,16 +36,15 @@ const Cashflow = () => {
   const handleSuggestionClick = (index, name) => {
     const newItems = [...items];
     newItems[index].name = name;
+    newItems[index].suggestions = []; // Clear suggestions for this input only
     setItems(newItems);
-    setSuggestions([]); // Clear suggestions
-    setActiveIndex(null); // Hide dropdown
+    setActiveIndex(null);
   };
 
   // Add new item field
   const addItem = () => {
-    setItems([...items, { name: "", cost: "" }]);
+    setItems([...items, { name: "", cost: "", suggestions: [] }]);
     setActiveIndex(null);
-    setSuggestions([]);
   };
 
   // Handle form submission
@@ -56,9 +55,8 @@ const Cashflow = () => {
     try {
       await axios.post("https://uskillbook.onrender.com/api/cashflow", orderData);
       alert("Transaction Added Successfully");
-      setItems([{ name: "", cost: "" }]);
+      setItems([{ name: "", cost: "", suggestions: [] }]);
       setSellingPrice("");
-      setSuggestions([]);
       setActiveIndex(null);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -77,16 +75,14 @@ const Cashflow = () => {
               value={item.name}
               onChange={(e) => handleChange(index, "name", e.target.value)}
               onFocus={() => setActiveIndex(index)}
-              onBlur={() => {
-                if (activeIndex === index) setActiveIndex(null);
-              }}
+              onBlur={() => setTimeout(() => setActiveIndex(null), 200)} // Delay to allow clicking suggestion
             />
-            {activeIndex === index && suggestions.length > 0 && (
+            {activeIndex === index && item.suggestions.length > 0 && (
               <ul
                 className="suggestions-list"
                 onMouseDown={(e) => e.preventDefault()} // Prevent closing on click
               >
-                {suggestions.map((book, i) => (
+                {item.suggestions.map((book, i) => (
                   <li key={i} onClick={() => handleSuggestionClick(index, book.name)}>
                     {book.name} - ₹{book.price}
                   </li>
