@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./cashflow.css"; // Ensure styles are included
 
 const Cashflow = () => {
   const [items, setItems] = useState([{ name: "", cost: "" }]);
